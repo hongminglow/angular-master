@@ -9,11 +9,14 @@
     <p class="demo-subtitle">
       This counter runs on Angular Signals — no Zone.js, no full re-renders
     </p>
-    <div class="counter-display">
+    <div class="counter-display" [class.even-glow]="isEven()" [class.odd-glow]="!isEven()">
       <div class="count-value" [class.even]="isEven()" [class.odd]="!isEven()">
         {{ count() }}
       </div>
-      <p class="count-status">{{ isEven() ? '✅ Even' : '🔸 Odd' }}</p>
+      <div class="status-pill" [class.even]="isEven()" [class.odd]="!isEven()">
+        <span class="status-indicator"></span>
+        <span class="status-text">{{ isEven() ? 'Even' : 'Odd' }}</span>
+      </div>
     </div>
     <div class="counter-buttons">
       <button class="btn btn-secondary" (click)="decrement()">−</button>
@@ -22,15 +25,15 @@
     </div>
     <div class="computed-display">
       <div class="computed-item">
-        <span class="computed-label">count()</span>
+        <span class="computed-label">🔢 count()</span>
         <span class="computed-value">{{ count() }}</span>
       </div>
       <div class="computed-item">
-        <span class="computed-label">doubleCount()</span>
+        <span class="computed-label">✖️ doubleCount()</span>
         <span class="computed-value">{{ doubleCount() }}</span>
       </div>
       <div class="computed-item">
-        <span class="computed-label">greeting()</span>
+        <span class="computed-label">👋 greeting()</span>
         <span class="computed-value greeting-val">{{ greeting() }}</span>
       </div>
     </div>

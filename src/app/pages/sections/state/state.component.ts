@@ -8,6 +8,7 @@ import { CodeBlockComponent } from '@shared/code-block/code-block.component';
   selector: 'app-state',
   imports: [CommonModule, SectionPageComponent, ComparisonCardComponent, CodeBlockComponent],
   templateUrl: './state.component.html',
+  styleUrl: '../sections.shared.css',
 })
 export class StateComponent {
   // ===== SIGNAL DEMO =====

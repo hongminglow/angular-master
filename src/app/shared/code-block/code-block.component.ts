@@ -58,8 +58,11 @@ import { CommonModule } from '@angular/common';
       .code-block-wrapper {
         border-radius: 0.75rem;
         overflow: hidden;
-        border: 1px solid rgba(99, 102, 241, 0.2);
-        background: #0f0f1a;
+        border: 1px solid rgba(99, 102, 241, 0.18);
+        background: #09090f;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
       }
       .code-block-header {
         display: flex;
@@ -107,11 +110,17 @@ import { CommonModule } from '@angular/common';
       .code-pre {
         margin: 0;
         padding: 1.25rem;
+        /* Each panel scrolls independently — content never bleeds into sibling */
         overflow-x: auto;
+        overflow-y: auto;
+        max-height: 480px;
+        flex: 1;
         font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
-        font-size: 0.8rem;
-        line-height: 1.6;
+        font-size: 0.795rem;
+        line-height: 1.65;
         color: #e2e8f0;
+        white-space: pre;
+        word-break: normal;
       }
     `,
   ],
