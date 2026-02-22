@@ -1,0 +1,164 @@
+<app-section-page
+  title="Performance Optimization"
+  subtitle="useMemo/useCallback/React.memo vs OnPush, Pure Pipes, trackBy, and computed()"
+  icon="🚀"
+>
+  <!-- Live Demo -->
+  <div class="demo-card">
+    <h3 class="demo-title">🎮 Live — Pure Pipe + OnPush Demo</h3>
+    <p class="demo-subtitle">
+      This whole component uses OnPush strategy + a Pure Pipe for prime filtering
+    </p>
+
+    <div style="display: flex; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap">
+      <button class="btn btn-primary" (click)="togglePrimes()">
+        {{ onlyPrimes() ? '🔢 Show All' : '🔬 Show Primes Only' }}
+      </button>
+      <button class="btn btn-secondary" (click)="increaseMax()">
+        Max: {{ maxNumber() }} → +10
+      </button>
+    </div>
+
+    <div
+      style="
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        max-height: 120px;
+        overflow-y: auto;
+        padding: 0.75rem;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 0.5rem;
+      "
+    >
+      @for (n of numbers() | filterPrimes: onlyPrimes(); track n) {
+        <span
+          style="
+            font-size: 0.75rem;
+            padding: 0.15rem 0.45rem;
+            background: rgba(99, 102, 241, 0.15);
+            border-radius: 4px;
+            color: #a5b4fc;
+            font-family: 'Fira Code', monospace;
+          "
+        >
+          {{ n }}
+        </span>
+      }
+    </div>
+
+    <div class="computed-display" style="margin-top: 1rem">
+      <div class="computed-item">
+        <span class="computed-label">Current strategy</span>
+        <span class="computed-value" style="color: #4ade80">OnPush ✓</span>
+      </div>
+      <div class="computed-item">
+        <span class="computed-label">Pipe type</span>
+        <span class="computed-value" style="color: #4ade80">Pure (memoized) ✓</span>
+      </div>
+      <div class="computed-item">
+        <span class="computed-label">Total numbers</span>
+        <span class="computed-value">{{ numbers().length }}</span>
+      </div>
+      <div class="computed-item">
+        <span class="computed-label">Visible count</span>
+        <span class="computed-value">{{ (numbers() | filterPrimes: onlyPrimes()).length }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Concept box -->
+  <div class="concept-box">
+    <h3 class="concept-title">💡 Performance Optimization Mapping</h3>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Goal</th>
+          <th class="react-cell">React</th>
+          <th class="angular-cell">Angular</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Memoize value</td>
+          <td>useMemo(fn, deps)</td>
+          <td>computed() — auto-tracks, no deps array</td>
+        </tr>
+        <tr>
+          <td>Stable function ref</td>
+          <td>useCallback(fn, deps)</td>
+          <td>Class methods are always stable — no equivalent needed</td>
+        </tr>
+        <tr>
+          <td>Skip re-render</td>
+          <td>React.memo(Component)</td>
+          <td>ChangeDetectionStrategy.OnPush</td>
+        </tr>
+        <tr>
+          <td>Memoize template transform</td>
+          <td>useMemo inside component</td>
+          <td>Pure Pipe (pure: true)</td>
+        </tr>
+        <tr>
+          <td>List diffing key</td>
+          <td>key=&#123;item.id&#125;</td>
+          <td><code>&#64;for (item of list; track item.id)</code></td>
+        </tr>
+        <tr>
+          <td>Lazy load component</td>
+          <td>React.lazy + Suspense</td>
+          <td>loadComponent() in routes</td>
+        </tr>
+        <tr>
+          <td>Lazy load module</td>
+          <td>dynamic import()</td>
+          <td>loadChildren() in routes</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="comparison-section">
+    <h3 class="comparison-title">1. useMemo vs computed() + Pure Pipes</h3>
+    <app-comparison-card
+      [reactCode]="useMemoReact"
+      [angularCode]="computedPipeAngular"
+      reactLabel="useMemo + useCallback + React.memo"
+      angularLabel="computed() + Pure Pipe + OnPush"
+    />
+    <div class="key-diff-note">
+      <strong>No useCallback in Angular!</strong> Angular class methods always have stable
+      references — they're bound to the class instance, not recreated on each render. This
+      eliminates an entire category of React performance bugs.
+    </div>
+  </div>
+
+  <div class="comparison-section">
+    <h3 class="comparison-title">2. ChangeDetectionStrategy.OnPush (≈ React.memo)</h3>
+    <app-code-block
+      [code]="onPushStrategy"
+      language="angular-ts"
+      label="OnPush change detection strategy"
+    />
+    <div class="key-diff-note">
+      <strong>Best practice:</strong> Apply <code>OnPush</code> to all components that receive data
+      via inputs or signals. Angular 17+ with Signals actually makes OnPush the default behavior —
+      signals automatically notify only their direct consumers.
+    </div>
+  </div>
+
+  <div class="comparison-section">
+    <h3 class="comparison-title">3. trackBy in <code>&#64;for</code> (≈ React's key)</h3>
+    <app-code-block
+      [code]="trackByAngular"
+      language="angular-ts"
+      label="&#64;for with track — list reconciliation"
+    />
+    <div class="key-diff-note">
+      <strong>Angular 17+ syntax:</strong> The new <code>&#64;for</code> control flow requires the
+      <code>track</code> expression (unlike the old <code>*ngFor</code> where
+      <code>trackBy</code> was optional). This forces good defaults and prevents accidental
+      full-list re-renders.
+    </div>
+  </div>
+</app-section-page>

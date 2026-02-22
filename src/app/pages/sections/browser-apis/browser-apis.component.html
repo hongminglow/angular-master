@@ -1,0 +1,232 @@
+<app-section-page
+  title="Browser APIs & Platform Safety"
+  subtitle="LocalStorage, window/document APIs, and SSR-safe patterns — Angular's PLATFORM_ID vs React's typeof window checks"
+  icon="🔧"
+>
+  <!-- SSR Warning banner -->
+  @if (!isBrowser) {
+    <div
+      style="
+        padding: 1rem;
+        background: rgba(251, 146, 60, 0.1);
+        border: 1px solid rgba(251, 146, 60, 0.3);
+        border-radius: 0.75rem;
+        color: #fb923c;
+        font-size: 0.875rem;
+        margin-bottom: 1.5rem;
+      "
+    >
+      ⚠️ Running on server-side — browser APIs are not available. The demo below will show defaults.
+    </div>
+  }
+
+  <!-- LocalStorage Demo -->
+  <div class="demo-card">
+    <h3 class="demo-title">🎮 Live — localStorage Demo</h3>
+    <p class="demo-subtitle">Angular's PLATFORM_ID pattern for SSR-safe storage access</p>
+
+    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap">
+      <input
+        [value]="newKey()"
+        (input)="updateKey($event)"
+        placeholder="Key"
+        class="form-input-demo"
+        style="flex: 1; min-width: 120px"
+      />
+      <input
+        [value]="newValue()"
+        (input)="updateValue($event)"
+        placeholder="Value"
+        class="form-input-demo"
+        style="flex: 2; min-width: 120px"
+      />
+      <button class="btn btn-primary" (click)="setItem()">Save</button>
+    </div>
+
+    @if (storageItems().length > 0) {
+      <div style="display: flex; flex-direction: column; gap: 0.4rem">
+        @for (item of storageItems(); track item.key) {
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 0.75rem;
+              padding: 0.6rem 0.75rem;
+              background: rgba(99, 102, 241, 0.06);
+              border: 1px solid rgba(99, 102, 241, 0.12);
+              border-radius: 0.5rem;
+            "
+          >
+            <span
+              style="
+                font-family: 'Fira Code', monospace;
+                color: #a5b4fc;
+                font-size: 0.8rem;
+                min-width: 80px;
+              "
+              >{{ item.key }}</span
+            >
+            <span style="flex: 1; color: #e2e8f0; font-size: 0.8rem">{{ item.value }}</span>
+            <button
+              (click)="removeItem(item.key)"
+              style="
+                background: none;
+                border: none;
+                cursor: pointer;
+                color: #f87171;
+                font-size: 1rem;
+              "
+            >
+              ×
+            </button>
+          </div>
+        }
+      </div>
+    } @else {
+      <p style="color: #475569; font-size: 0.82rem; text-align: center; padding: 0.5rem">
+        No items stored yet — add one above!
+      </p>
+    }
+
+    <p style="font-size: 0.7rem; color: #334155; margin-top: 0.75rem">
+      Keys are prefixed with "ng_demo_" in localStorage. Platform:
+      <span [style.color]="isBrowser ? '#4ade80' : '#f87171'">{{
+        isBrowser ? 'Browser ✓' : 'Server ✗'
+      }}</span>
+    </p>
+  </div>
+
+  <!-- Window Info Demo -->
+  <div class="demo-card">
+    <h3 class="demo-title">🌐 Window Info</h3>
+    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem">
+      <button class="btn btn-secondary" (click)="updateWindowInfo()">Refresh</button>
+    </div>
+    <div class="computed-display">
+      <div class="computed-item">
+        <span class="computed-label">window.innerWidth</span>
+        <span class="computed-value">{{ windowInfo().width }}px</span>
+      </div>
+      <div class="computed-item">
+        <span class="computed-label">window.innerHeight</span>
+        <span class="computed-value">{{ windowInfo().height }}px</span>
+      </div>
+      <div class="computed-item">
+        <span class="computed-label">navigator.onLine</span>
+        <span class="computed-value" [style.color]="windowInfo().online ? '#4ade80' : '#f87171'">{{
+          windowInfo().online
+        }}</span>
+      </div>
+      <div
+        class="computed-item"
+        style="flex-direction: column; align-items: flex-start; gap: 0.25rem"
+      >
+        <span class="computed-label">navigator.userAgent</span>
+        <span class="computed-value" style="font-size: 0.65rem; word-break: break-all">{{
+          windowInfo().userAgent
+        }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features Table -->
+  <div class="concept-box">
+    <h3 class="concept-title">💡 SSR-Safe Browser API Patterns</h3>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>API</th>
+          <th class="react-cell">React</th>
+          <th class="angular-cell">Angular</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>localStorage</td>
+          <td>typeof window !== 'undefined'</td>
+          <td>isPlatformBrowser(PLATFORM_ID)</td>
+        </tr>
+        <tr>
+          <td>document</td>
+          <td>typeof document !== 'undefined'</td>
+          <td>inject(DOCUMENT)</td>
+        </tr>
+        <tr>
+          <td>window.title</td>
+          <td>next/head or document.title</td>
+          <td>inject(Title).setTitle()</td>
+        </tr>
+        <tr>
+          <td>window events</td>
+          <td>useEffect + addEventListener</td>
+          <td>fromEvent(window, 'click')</td>
+        </tr>
+        <tr>
+          <td>DOM refs</td>
+          <td><code>useRef + ref=&#123;ref&#125;</code></td>
+          <td><code>&#64;ViewChild() + ElementRef</code></td>
+        </tr>
+        <tr>
+          <td>URL/History</td>
+          <td>useRouter() (Next.js)</td>
+          <td>inject(Router)</td>
+        </tr>
+        <tr>
+          <td>Cookies</td>
+          <td>js-cookie or document.cookie</td>
+          <td>Manual or SSR-aware service</td>
+        </tr>
+        <tr>
+          <td>Meta tags</td>
+          <td>next/head, react-helmet</td>
+          <td>inject(Meta).updateTag()</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="comparison-section">
+    <h3 class="comparison-title">1. LocalStorage — typeof window vs PLATFORM_ID</h3>
+    <app-comparison-card
+      [reactCode]="reactLocalStorage"
+      [angularCode]="angularLocalStorage"
+      reactLabel="React custom hook"
+      angularLabel="Angular StorageService + PLATFORM_ID"
+    />
+    <div class="key-diff-note">
+      <strong>Why PLATFORM_ID?</strong> Angular's DI system provides the platform identifier.
+      <code>isPlatformBrowser(platformId)</code> is cleaner than
+      <code>typeof window !== 'undefined'</code>
+      and works correctly with Angular Universal (SSR) — no false positives.
+    </div>
+  </div>
+
+  <div class="comparison-section">
+    <h3 class="comparison-title">2. Window/document APIs</h3>
+    <app-comparison-card
+      [reactCode]="reactWindowApi"
+      [angularCode]="angularWindowApi"
+      reactLabel="React custom hooks"
+      angularLabel="Angular WindowService + DOCUMENT"
+    />
+    <div class="key-diff-note">
+      <strong>Angular's DOCUMENT token:</strong> Always inject <code>DOCUMENT</code> instead of
+      using global <code>document</code> directly. The injected DOCUMENT is SSR-compatible and can
+      be mocked in tests.
+    </div>
+  </div>
+
+  <div class="comparison-section">
+    <h3 class="comparison-title">3. SEO — Title & Meta Services</h3>
+    <app-code-block
+      [code]="angularTitleMeta"
+      language="angular-ts"
+      label="Angular Title + Meta services"
+    />
+    <div class="key-diff-note">
+      <strong>React (Next.js) comparison:</strong> Next.js 13+ uses the <code>metadata</code> export
+      object in page files. Angular uses injectable <code>Title</code> and
+      <code>Meta</code> services — called programmatically in <code>ngOnInit()</code>.
+    </div>
+  </div>
+</app-section-page>

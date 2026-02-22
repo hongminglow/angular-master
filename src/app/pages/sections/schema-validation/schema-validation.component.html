@@ -1,0 +1,201 @@
+<app-section-page
+  title="Schema Validation — Validators vs Zod/Yup"
+  subtitle="Angular's built-in Validators + custom ValidatorFn vs React's Zod and Yup schemas"
+  icon="✅"
+>
+  <!-- Live Demo -->
+  <div class="demo-card">
+    <h3 class="demo-title">🎮 Live Password Strength Checker</h3>
+    <p class="demo-subtitle">Custom Angular validator — equivalent to a Zod .refine() chain</p>
+
+    <div style="margin-bottom: 1.25rem">
+      <label class="form-label" style="display: block; margin-bottom: 0.375rem"
+        >Type a password</label
+      >
+      <input
+        type="text"
+        placeholder="Try typing a password..."
+        class="form-input-demo"
+        (input)="updatePassword($event)"
+        style="width: 100%"
+      />
+    </div>
+
+    <!-- Strength bar -->
+    @if (testPassword()) {
+      <div style="margin-bottom: 1rem">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            margin-bottom: 0.375rem;
+          "
+        >
+          <span style="color: #64748b">Strength</span>
+          <span [style.color]="passwordStrength().color">{{ passwordStrength().label }}</span>
+        </div>
+        <div
+          style="
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 999px;
+            height: 8px;
+            overflow: hidden;
+          "
+        >
+          <div
+            style="height: 100%; border-radius: 999px; transition: all 0.3s"
+            [style.width]="(passwordStrength().score / 5) * 100 + '%'"
+            [style.background]="passwordStrength().color"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Validation rules — use computed() not regex in template -->
+      <div style="display: flex; flex-direction: column; gap: 0.325rem">
+        <div
+          style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem"
+          [style.color]="hasMinLength() ? '#4ade80' : '#f87171'"
+        >
+          <span>{{ hasMinLength() ? '✓' : '✗' }}</span>
+          <span>At least 8 characters (current: {{ testPassword().length }})</span>
+        </div>
+        <div
+          style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem"
+          [style.color]="hasUpper() ? '#4ade80' : '#f87171'"
+        >
+          <span>{{ hasUpper() ? '✓' : '✗' }}</span>
+          <span>Contains uppercase letter</span>
+        </div>
+        <div
+          style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem"
+          [style.color]="hasLower() ? '#4ade80' : '#f87171'"
+        >
+          <span>{{ hasLower() ? '✓' : '✗' }}</span>
+          <span>Contains lowercase letter</span>
+        </div>
+        <div
+          style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem"
+          [style.color]="hasNumber() ? '#4ade80' : '#f87171'"
+        >
+          <span>{{ hasNumber() ? '✓' : '✗' }}</span>
+          <span>Contains a number</span>
+        </div>
+        <div
+          style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem"
+          [style.color]="hasSpecial() ? '#4ade80' : '#f87171'"
+        >
+          <span>{{ hasSpecial() ? '✓' : '✗' }}</span>
+          <span>Contains a special character</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Concept -->
+  <div class="concept-box">
+    <h3 class="concept-title">💡 Angular Validators vs Zod/Yup</h3>
+    <div class="concept-content">
+      <p>
+        Angular has <strong>built-in validators</strong> (required, email, min, max, minLength,
+        pattern) and allows <strong>custom ValidatorFn</strong> for any complex rule. React has no
+        built-in validation — it depends on Zod or Yup.
+      </p>
+    </div>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Rule</th>
+          <th class="react-cell">Zod</th>
+          <th class="angular-cell">Angular</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Required</td>
+          <td>z.string().nonempty()</td>
+          <td>Validators.required</td>
+        </tr>
+        <tr>
+          <td>Email</td>
+          <td>z.string().email()</td>
+          <td>Validators.email</td>
+        </tr>
+        <tr>
+          <td>Min length</td>
+          <td>z.string().min(n)</td>
+          <td>Validators.minLength(n)</td>
+        </tr>
+        <tr>
+          <td>Min number</td>
+          <td>z.number().min(n)</td>
+          <td>Validators.min(n)</td>
+        </tr>
+        <tr>
+          <td>Regex</td>
+          <td>z.string().regex(/pattern/)</td>
+          <td>Validators.pattern(/pattern/)</td>
+        </tr>
+        <tr>
+          <td>Custom rule</td>
+          <td>z.refine(fn, msg)</td>
+          <td>Custom ValidatorFn</td>
+        </tr>
+        <tr>
+          <td>Cross-field</td>
+          <td>z.object().refine(obj => ...)</td>
+          <td>Group-level ValidatorFn</td>
+        </tr>
+        <tr>
+          <td>Async check</td>
+          <td>z.string().refine(async fn)</td>
+          <td>AsyncValidatorFn</td>
+        </tr>
+        <tr>
+          <td>Type inference</td>
+          <td>z.infer&lt;typeof schema&gt;</td>
+          <td>TypeScript interfaces (manual)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="comparison-section">
+    <h3 class="comparison-title">1. Schema Validation — Zod vs Angular Validators</h3>
+    <app-comparison-card
+      [reactCode]="zodValidation"
+      [angularCode]="angularValidation"
+      reactLabel="Zod + react-hook-form"
+      angularLabel="Angular ValidatorFn"
+    />
+    <div class="key-diff-note">
+      <strong>Zod advantage:</strong> Zod infers TypeScript types from the schema automatically.
+      Angular validators don't infer types — you define them separately. However, Angular 17+ typed
+      forms provide type safety at the <code>FormGroup</code> level.
+    </div>
+  </div>
+
+  <div class="comparison-section">
+    <h3 class="comparison-title">2. Yup vs Angular</h3>
+    <app-code-block [code]="yupValidation" language="tsx" label="Yup (React)" />
+    <div class="key-diff-note">
+      <strong>Yup vs Zod:</strong> Both are React ecosystem schema validators. Yup is async, Zod is
+      sync. Angular has neither — it uses its own validator system. However, you <em>can</em> use
+      Zod in Angular for runtime validation of API responses.
+    </div>
+  </div>
+
+  <div class="comparison-section">
+    <h3 class="comparison-title">3. Async Validators — Server-Side Checks</h3>
+    <app-code-block
+      [code]="asyncValidatorAngular"
+      language="angular-ts"
+      label="AsyncValidatorFn — email exists check"
+    />
+    <div class="key-diff-note">
+      <strong>Angular advantage:</strong> Async validators are first-class citizens in Angular forms
+      — pass them as the third argument to <code>FormBuilder.group()</code>. In React, async
+      validation requires custom setup with react-hook-form's <code>validate</code> option.
+    </div>
+  </div>
+</app-section-page>

@@ -1,0 +1,145 @@
+<app-section-page
+  title="Side Effects & Lifecycle"
+  subtitle="Angular's lifecycle hooks + effect() vs React's useEffect — how both frameworks handle side effects"
+  icon="🔄"
+>
+  <!-- Live Demo -->
+  <div class="demo-card">
+    <h3 class="demo-title">🎮 Live Effect Demo — Timer</h3>
+    <p class="demo-subtitle">
+      effect() watches isRunning and starts/stops the interval automatically
+    </p>
+
+    <div style="text-align: center; margin-bottom: 1.25rem">
+      <div
+        style="
+          font-size: 4rem;
+          font-weight: 900;
+          color: #60a5fa;
+          font-variant-numeric: tabular-nums;
+        "
+      >
+        {{ seconds() }}s
+      </div>
+      <p style="color: #64748b; font-size: 0.85rem">
+        {{ isRunning() ? '🟢 Running' : '⏸️ Paused' }}
+      </p>
+    </div>
+
+    <div style="display: flex; gap: 0.75rem; justify-content: center; margin-bottom: 1rem">
+      <button class="btn btn-primary" (click)="toggleTimer()">
+        {{ isRunning() ? '⏸ Pause' : '▶ Start' }}
+      </button>
+      <button class="btn btn-ghost" (click)="resetTimer()">⏹ Reset</button>
+    </div>
+
+    <div class="computed-display">
+      <div class="computed-item">
+        <span class="computed-label">isRunning()</span>
+        <span class="computed-value" [style.color]="isRunning() ? '#4ade80' : '#f87171'">{{
+          isRunning()
+        }}</span>
+      </div>
+      <div class="computed-item">
+        <span class="computed-label">seconds()</span>
+        <span class="computed-value">{{ seconds() }}</span>
+      </div>
+      <div class="computed-item">
+        <span class="computed-label">window.innerWidth</span>
+        <span class="computed-value">{{ windowWidth() }}px</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conceptual explanation -->
+  <div class="concept-box">
+    <h3 class="concept-title">💡 Angular Lifecycle vs React Hooks</h3>
+    <div class="concept-content">
+      <p>
+        React uses a single <strong>useEffect</strong> hook for all side effects. Angular separates
+        concerns into named <strong>lifecycle hooks</strong> (methods) and the signal-based
+        <strong>effect()</strong> function.
+      </p>
+    </div>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Scenario</th>
+          <th class="react-cell">React</th>
+          <th class="angular-cell">Angular</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>On mount (once)</td>
+          <td class="react-cell"><code>useEffect(() => &#123;&#125;, [])</code></td>
+          <td class="angular-cell">ngOnInit()</td>
+        </tr>
+        <tr>
+          <td>On unmount (cleanup)</td>
+          <td class="react-cell"><code>useEffect(() => &#123; return cleanup; &#125;)</code></td>
+          <td class="angular-cell">ngOnDestroy()</td>
+        </tr>
+        <tr>
+          <td>After DOM renders</td>
+          <td class="react-cell">useLayoutEffect()</td>
+          <td class="angular-cell">ngAfterViewInit()</td>
+        </tr>
+        <tr>
+          <td>On input changes</td>
+          <td class="react-cell">useEffect([prop])</td>
+          <td class="angular-cell">ngOnChanges()</td>
+        </tr>
+        <tr>
+          <td>Signal/state changes</td>
+          <td class="react-cell">useEffect([state])</td>
+          <td class="angular-cell">effect() — auto-tracks</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="comparison-section">
+    <h3 class="comparison-title">1. Basic Effect / Timer</h3>
+    <app-comparison-card
+      [reactCode]="useEffectBasicReact"
+      [angularCode]="effectBasicAngular"
+      reactLabel="React useEffect + cleanup"
+      angularLabel="Angular effect() + OnDestroy"
+    />
+    <div class="key-diff-note">
+      <strong>Key difference:</strong> React requires explicit dependency arrays — miss one and you
+      get stale closures. Angular <code>effect()</code> automatically tracks which signals it reads.
+      No dependencies to declare.
+    </div>
+  </div>
+
+  <div class="comparison-section">
+    <h3 class="comparison-title">2. Lifecycle Hooks Comparison</h3>
+    <app-comparison-card
+      [reactCode]="useEffectMountReact"
+      [angularCode]="lifecycleAngular"
+      reactLabel="React useEffect variants"
+      angularLabel="Angular lifecycle methods"
+    />
+    <div class="key-diff-note">
+      <strong>Why named hooks?</strong> Angular's named lifecycle methods make code more readable —
+      you immediately know if you're doing initialization vs cleanup without checking the dep array.
+    </div>
+  </div>
+
+  <div class="comparison-section">
+    <h3 class="comparison-title">3. Cleanup — DestroyRef (Angular 16+)</h3>
+    <app-code-block
+      [code]="destroyRefAngular"
+      language="angular-ts"
+      label="DestroyRef + takeUntilDestroyed"
+    />
+    <div class="key-diff-note">
+      <strong>Angular 16+ bonus:</strong> <code>DestroyRef</code> +
+      <code>takeUntilDestroyed()</code> lets you register cleanup anywhere in a class without
+      implementing the <code>OnDestroy</code>
+      interface. Very useful inside services and child injectors.
+    </div>
+  </div>
+</app-section-page>

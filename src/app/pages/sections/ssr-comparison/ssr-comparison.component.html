@@ -1,0 +1,147 @@
+<app-section-page
+  title="SSR: Next.js vs Angular Universal"
+  subtitle="Comparing server-side rendering strategies between React's Next.js and Angular's built-in SSR"
+  icon="🖥️"
+>
+  <!-- Feature comparison table -->
+  <div class="concept-box" style="margin-bottom: 2rem">
+    <h3 class="concept-title">📊 SSR Feature Comparison</h3>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th class="react-cell">Next.js</th>
+          <th class="angular-cell">Angular SSR</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>SSR Setup</td>
+          <td>Built into framework, file-based</td>
+          <td>ng add &#64;angular/ssr, separate server.ts</td>
+        </tr>
+        <tr>
+          <td>Data Fetching (SSR)</td>
+          <td>getServerSideProps / async components</td>
+          <td>HttpClient + TransferState</td>
+        </tr>
+        <tr>
+          <td>Static Generation</td>
+          <td>getStaticProps + ISR</td>
+          <td>RenderMode.Prerender + routes</td>
+        </tr>
+        <tr>
+          <td>Hydration</td>
+          <td>Automatic (Partial Hydration via RSC)</td>
+          <td>withEventReplay() + full hydration</td>
+        </tr>
+        <tr>
+          <td>Server Components</td>
+          <td>✅ Yes (React Server Components)</td>
+          <td>❌ No (all code runs on both)</td>
+        </tr>
+        <tr>
+          <td>Routing</td>
+          <td>File-system based (app/ or pages/)</td>
+          <td>app.routes.ts configuration</td>
+        </tr>
+        <tr>
+          <td>Streaming</td>
+          <td>✅ Suspense + streaming</td>
+          <td>⚠️ Limited (experimental)</td>
+        </tr>
+        <tr>
+          <td>Edge Runtime</td>
+          <td>✅ Vercel Edge, Cloudflare</td>
+          <td>⚠️ Limited support</td>
+        </tr>
+        <tr>
+          <td>SEO Meta Tags</td>
+          <td>Metadata API (metadata export)</td>
+          <td>Title service + Meta service</td>
+        </tr>
+        <tr>
+          <td>Deploy Target</td>
+          <td>Vercel (optimized), Node.js</td>
+          <td>Node.js / Express (server.ts)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Setup comparison -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">1. SSR Setup & Rendering Modes</h3>
+    <app-comparison-card
+      [reactCode]="nextjsSetup"
+      [angularCode]="angularSsrSetup"
+      reactLabel="Next.js Pages & App Router"
+      angularLabel="Angular SSR RenderMode"
+    />
+    <div class="key-diff-note">
+      <strong>Key difference:</strong> Next.js uses file-based routing where the folder structure
+      determines routes. Angular uses explicit route configuration in <code>app.routes.ts</code>.
+      Angular's <code>RenderMode</code> enum gives fine-grained control per route.
+    </div>
+  </div>
+
+  <!-- Hydration comparison -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">2. Hydration & Client-Side Safety</h3>
+    <app-comparison-card
+      [reactCode]="hydrationNext"
+      [angularCode]="hydrationAngular"
+      reactLabel="Next.js Hydration + Streaming"
+      angularLabel="Angular withEventReplay() + PLATFORM_ID"
+    />
+    <div class="key-diff-note">
+      <strong>Angular gotcha:</strong> When using SSR, all browser APIs (window, document,
+      localStorage) must be guarded with <code>isPlatformBrowser()</code> — they don't exist on the
+      server. Next.js Server Components have the same limitation but are more explicit about it.
+    </div>
+  </div>
+
+  <!-- Data fetching comparison -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">3. Server-Side Data Fetching</h3>
+    <app-comparison-card
+      [reactCode]="nextjsDataFetch"
+      [angularCode]="angularSsrDataFetch"
+      reactLabel="Next.js getServerSideProps / async"
+      angularLabel="Angular HttpClient + TransferState"
+    />
+    <div class="key-diff-note">
+      <strong>TransferState:</strong> Angular's TransferState serializes server-fetched data into
+      the HTML so the client doesn't re-fetch it — equivalent to Next.js's automatic deduplication.
+      With <code>withFetch()</code>, Angular handles this automatically for HttpClient requests.
+    </div>
+  </div>
+
+  <!-- Architecture info cards -->
+  <div class="info-grid">
+    <div class="info-card">
+      <h4 class="info-card-title">✅ When to Choose Next.js</h4>
+      <div class="info-card-content">
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.4rem">
+          <li>• You need React Server Components</li>
+          <li>• Edge/CDN deployment is required</li>
+          <li>• Full-stack API routes needed (<code>app/api/</code>)</li>
+          <li>• Streaming + Suspense boundaries</li>
+          <li>• Strong Vercel ecosystem integration</li>
+        </ul>
+      </div>
+    </div>
+    <div class="info-card">
+      <h4 class="info-card-title">✅ When to Choose Angular SSR</h4>
+      <div class="info-card-content">
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.4rem">
+          <li>• Your team uses Angular already</li>
+          <li>• Enterprise apps with strong DI requirements</li>
+          <li>• SEO with existing Angular codebase</li>
+          <li>• You prefer class-based architecture</li>
+          <li>• Built-in RxJS async pipeline preferred</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</app-section-page>

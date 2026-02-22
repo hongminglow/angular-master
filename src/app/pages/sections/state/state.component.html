@@ -1,0 +1,130 @@
+<app-section-page
+  title="State Management with Signals"
+  subtitle="Angular's answer to useState, useMemo, and useReducer — fine-grained reactivity without VDOM"
+  icon="⚡"
+>
+  <!-- Live Demo -->
+  <div class="demo-card">
+    <h3 class="demo-title">🎮 Live Signal Demo</h3>
+    <p class="demo-subtitle">
+      This counter runs on Angular Signals — no Zone.js, no full re-renders
+    </p>
+    <div class="counter-display">
+      <div class="count-value" [class.even]="isEven()" [class.odd]="!isEven()">
+        {{ count() }}
+      </div>
+      <p class="count-status">{{ isEven() ? '✅ Even' : '🔸 Odd' }}</p>
+    </div>
+    <div class="counter-buttons">
+      <button class="btn btn-secondary" (click)="decrement()">−</button>
+      <button class="btn btn-primary" (click)="increment()">+</button>
+      <button class="btn btn-ghost" (click)="reset()">Reset</button>
+    </div>
+    <div class="computed-display">
+      <div class="computed-item">
+        <span class="computed-label">count()</span>
+        <span class="computed-value">{{ count() }}</span>
+      </div>
+      <div class="computed-item">
+        <span class="computed-label">doubleCount()</span>
+        <span class="computed-value">{{ doubleCount() }}</span>
+      </div>
+      <div class="computed-item">
+        <span class="computed-label">greeting()</span>
+        <span class="computed-value greeting-val">{{ greeting() }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Concept Explanation -->
+  <div class="concept-box">
+    <h3 class="concept-title">💡 What are Angular Signals?</h3>
+    <div class="concept-content">
+      <p>
+        Signals are <strong>reactive, synchronous primitives</strong> introduced in Angular 16.
+        Unlike React's useState which triggers a full component re-render, Signals allow Angular to
+        update <em>only the specific DOM nodes</em> that depend on the signal.
+      </p>
+      <div class="concept-grid">
+        <div class="concept-item">
+          <span class="concept-icon">📦</span>
+          <div><strong>signal()</strong> — writable reactive value (≈ useState)</div>
+        </div>
+        <div class="concept-item">
+          <span class="concept-icon">🧮</span>
+          <div><strong>computed()</strong> — derived value, lazily cached (≈ useMemo)</div>
+        </div>
+        <div class="concept-item">
+          <span class="concept-icon">👀</span>
+          <div><strong>effect()</strong> — runs when signals change (≈ useEffect)</div>
+        </div>
+        <div class="concept-item">
+          <span class="concept-icon">🔗</span>
+          <div><strong>linkedSignal()</strong> — writable derived signal (Angular 19+)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison 1: Basic State -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">1. Basic State — useState vs signal()</h3>
+    <app-comparison-card
+      [reactCode]="basicStateReact"
+      [angularCode]="basicStateAngular"
+      reactLabel="React useState"
+      angularLabel="Angular signal()"
+    />
+    <div class="key-diff-note">
+      <strong>Key difference:</strong> React rerenders the <em>entire component function</em> when
+      state changes. Angular Signals update only the specific template bindings — more efficient
+      with complex UIs.
+    </div>
+  </div>
+
+  <!-- Comparison 2: useMemo vs computed -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">2. Derived State — useMemo vs computed()</h3>
+    <app-comparison-card
+      [reactCode]="useMemoReact"
+      [angularCode]="computedAngular"
+      reactLabel="React useMemo"
+      angularLabel="Angular computed()"
+    />
+    <div class="key-diff-note">
+      <strong>Key difference:</strong> React <code>useMemo</code> requires manually declaring
+      dependency arrays. Angular <code>computed()</code> <em>automatically tracks</em> which signals
+      it reads — no missing dependency bugs!
+    </div>
+  </div>
+
+  <!-- Comparison 3: useReducer vs signal update patterns -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">3. Complex State — useReducer vs signal.update()</h3>
+    <app-comparison-card
+      [reactCode]="useReducerReact"
+      [angularCode]="signalUpdateAngular"
+      reactLabel="React useReducer"
+      angularLabel="Angular signal.update()"
+    />
+    <div class="key-diff-note">
+      <strong>Tip:</strong> Angular doesn't have a built-in reducer pattern but signal's
+      <code>update(fn)</code> method covers most cases. For complex state machines, use an NgRx
+      store or a service with signals.
+    </div>
+  </div>
+
+  <!-- linkedSignal Bonus -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">4. Angular-Specific: linkedSignal() — Angular 19+</h3>
+    <app-code-block
+      [code]="linkedSignalAngular"
+      language="angular-ts"
+      label="linkedSignal — writable derived signal"
+    />
+    <div class="key-diff-note">
+      <strong>No React equivalent!</strong> <code>linkedSignal()</code> creates a writable signal
+      whose default value is derived from another signal. Useful for "reset on change" patterns.
+    </div>
+  </div>
+</app-section-page>

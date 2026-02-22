@@ -1,0 +1,146 @@
+<div class="home-page">
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <div class="hero-badge">From React to Angular</div>
+      <h1 class="hero-title">
+        Master Angular<br />
+        <span class="hero-accent">syntax & patterns</span>
+      </h1>
+      <p class="hero-desc">
+        A practical, side-by-side comparison of Angular and React. Each section contains interactive
+        examples, code snippets, and real-world use cases — specifically crafted for developers
+        coming from React.
+      </p>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-number">9</span>
+          <span class="stat-label">Topics</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-number">21</span>
+          <span class="stat-label">Angular v21</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-number">SSR</span>
+          <span class="stat-label">Built-in</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key Differences -->
+  <div class="key-diffs">
+    <h2 class="section-heading">🔑 Key Mental Model Shifts</h2>
+    <div class="diff-grid">
+      <div class="diff-card">
+        <span class="diff-icon">⚛️</span>
+        <div>
+          <p class="diff-react">React: Components are functions returning JSX</p>
+          <p class="diff-arrow">→</p>
+          <p class="diff-angular">
+            Angular: Components are classes with decorators + separate HTML templates
+          </p>
+        </div>
+      </div>
+      <div class="diff-card">
+        <span class="diff-icon">📦</span>
+        <div>
+          <p class="diff-react">React: State lives in useState/useRef hooks</p>
+          <p class="diff-arrow">→</p>
+          <p class="diff-angular">
+            Angular: State lives in signal() / class properties, reactive via Signals
+          </p>
+        </div>
+      </div>
+      <div class="diff-card">
+        <span class="diff-icon">🔌</span>
+        <div>
+          <p class="diff-react">React: DI via Context API / prop drilling</p>
+          <p class="diff-arrow">→</p>
+          <p class="diff-angular">
+            Angular: Built-in Dependency Injection — services injected automatically
+          </p>
+        </div>
+      </div>
+      <div class="diff-card">
+        <span class="diff-icon">📡</span>
+        <div>
+          <p class="diff-react">React: Side effects via useEffect</p>
+          <p class="diff-arrow">→</p>
+          <p class="diff-angular">Angular: Lifecycle hooks (ngOnInit, ngOnDestroy) + effect()</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section Cards Grid -->
+  <div class="sections-area">
+    <h2 class="section-heading">📚 Learn by Comparison</h2>
+    <div class="cards-grid">
+      @for (section of sections; track section.path) {
+        <a [routerLink]="section.path" class="section-card" [style.--card-color]="section.color">
+          <div class="card-header">
+            <span class="card-icon">{{ section.icon }}</span>
+            <span class="card-badge">Angular</span>
+          </div>
+          <h3 class="card-title">{{ section.title }}</h3>
+          <p class="card-desc">{{ section.description }}</p>
+          <div class="card-compare">
+            <div class="compare-row">
+              <span class="compare-label react-lbl">⚛️ React</span>
+              <span class="compare-val">{{ section.reactEquivalent }}</span>
+            </div>
+            <div class="compare-row">
+              <span class="compare-label angular-lbl">🅰️ Angular</span>
+              <span class="compare-val">{{ section.angularConcept }}</span>
+            </div>
+          </div>
+          <div class="card-arrow">→</div>
+        </a>
+      }
+    </div>
+  </div>
+
+  <!-- Angular Architecture Note -->
+  <div class="architecture-note">
+    <h2 class="section-heading">🏗️ Angular Architecture Overview</h2>
+    <div class="arch-grid">
+      <div class="arch-item">
+        <div class="arch-icon">🎯</div>
+        <h4 class="arch-title">Singleton Services</h4>
+        <p class="arch-desc">
+          Services with <code>providedIn: 'root'</code> act like global state — instantiated once.
+          Similar to a Zustand store but with dependency injection.
+        </p>
+      </div>
+      <div class="arch-item">
+        <div class="arch-icon">🧩</div>
+        <h4 class="arch-title">Standalone Components</h4>
+        <p class="arch-desc">
+          Angular 17+ supports standalone components (no NgModule needed). Like React components,
+          they declare their own imports in the <code>imports: []</code> array.
+        </p>
+      </div>
+      <div class="arch-item">
+        <div class="arch-icon">🔀</div>
+        <h4 class="arch-title">Lazy Loading</h4>
+        <p class="arch-desc">
+          Routes use <code>loadComponent()</code> for code splitting — equivalent to Next.js dynamic
+          imports or React's lazy/Suspense.
+        </p>
+      </div>
+      <div class="arch-item">
+        <div class="arch-icon">📡</div>
+        <h4 class="arch-title">RxJS + Signals</h4>
+        <p class="arch-desc">
+          Angular embraces both RxJS Observables (async streams) and Signals (synchronous
+          reactivity). React only has hooks; Angular has multiple reactivity primitives.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

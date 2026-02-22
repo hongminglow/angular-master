@@ -1,0 +1,250 @@
+<app-section-page
+  title="Data Fetching — HttpClient vs fetch/axios"
+  subtitle="Angular's built-in HttpClient with RxJS Observables vs React's fetch, axios, and TanStack Query"
+  icon="🌐"
+>
+  <!-- Live Demo: Signal-based -->
+  <div class="demo-card">
+    <h3 class="demo-title">🎮 Live — Signal-based HttpClient</h3>
+    <p class="demo-subtitle">Fetching from jsonplaceholder.typicode.com with Angular HttpClient</p>
+
+    <div style="display: flex; gap: 0.75rem; margin-bottom: 1rem">
+      <button class="btn btn-primary" (click)="fetchPosts()">
+        {{ postState().loading ? '⏳ Fetching...' : '🔄 Fetch 5 Posts' }}
+      </button>
+    </div>
+
+    @if (postState().loading) {
+      <div style="display: flex; gap: 0.75rem; flex-direction: column">
+        @for (i of [1, 2, 3]; track i) {
+          <div
+            style="
+              height: 60px;
+              background: rgba(255, 255, 255, 0.04);
+              border-radius: 0.5rem;
+              animation: pulse 1.5s infinite;
+            "
+          ></div>
+        }
+      </div>
+    } @else if (postState().error) {
+      <div
+        style="
+          padding: 1rem;
+          background: rgba(239, 68, 68, 0.1);
+          border: 1px solid rgba(239, 68, 68, 0.25);
+          border-radius: 0.5rem;
+          color: #f87171;
+          font-size: 0.85rem;
+        "
+      >
+        ⚠️ Error: {{ postState().error }}
+      </div>
+    } @else if (postState().data) {
+      <div style="display: flex; flex-direction: column; gap: 0.5rem">
+        @for (post of postState().data; track post.id) {
+          <div
+            style="
+              padding: 0.875rem;
+              background: rgba(99, 102, 241, 0.06);
+              border: 1px solid rgba(99, 102, 241, 0.12);
+              border-radius: 0.5rem;
+            "
+          >
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem">
+              <span
+                style="
+                  font-size: 0.65rem;
+                  background: rgba(99, 102, 241, 0.2);
+                  color: #a5b4fc;
+                  padding: 0.1rem 0.4rem;
+                  border-radius: 4px;
+                "
+                >#{{ post.id }}</span
+              >
+              <h4
+                style="
+                  font-size: 0.82rem;
+                  font-weight: 600;
+                  color: #e2e8f0;
+                  margin: 0;
+                  text-transform: capitalize;
+                "
+              >
+                {{ post.title }}
+              </h4>
+            </div>
+            <p style="font-size: 0.75rem; color: #64748b; margin: 0; line-height: 1.4">
+              {{ post.body | slice: 0 : 100 }}...
+            </p>
+          </div>
+        }
+      </div>
+    } @else {
+      <p style="color: #475569; font-size: 0.85rem; text-align: center">
+        Click "Fetch 5 Posts" to load data
+      </p>
+    }
+  </div>
+
+  <!-- Live Demo: Observable + AsyncPipe -->
+  <div class="demo-card">
+    <h3 class="demo-title">🎮 Live — Observable + AsyncPipe</h3>
+    <p class="demo-subtitle">Single post — switchMap cancels previous request when id changes</p>
+
+    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem">
+      <button class="btn btn-secondary" (click)="changePost(-1)">← Prev</button>
+      <span style="font-size: 0.875rem; color: #a5b4fc; font-family: 'Fira Code', monospace"
+        >Post #{{ selectedPostId() }}</span
+      >
+      <button class="btn btn-secondary" (click)="changePost(1)">Next →</button>
+    </div>
+
+    @if (post$ | async; as state) {
+      @if (state.loading) {
+        <div
+          style="
+            height: 80px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 0.5rem;
+            animation: pulse 1.5s infinite;
+          "
+        ></div>
+      } @else if (state.data) {
+        <div
+          style="
+            padding: 1rem;
+            background: rgba(99, 102, 241, 0.06);
+            border: 1px solid rgba(99, 102, 241, 0.12);
+            border-radius: 0.5rem;
+          "
+        >
+          <h4
+            style="
+              font-size: 0.9rem;
+              font-weight: 600;
+              color: #e2e8f0;
+              margin: 0 0 0.5rem;
+              text-transform: capitalize;
+            "
+          >
+            {{ state.data.title }}
+          </h4>
+          <p style="font-size: 0.8rem; color: #64748b; margin: 0; line-height: 1.6">
+            {{ state.data.body }}
+          </p>
+        </div>
+      }
+    }
+    <p style="font-size: 0.7rem; color: #475569; margin-top: 0.5rem">
+      Auto-unsubscribed by AsyncPipe on destroy
+    </p>
+  </div>
+
+  <!-- Concept box -->
+  <div class="concept-box">
+    <h3 class="concept-title">💡 Angular HttpClient vs React Ecosystem</h3>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th class="react-cell">React</th>
+          <th class="angular-cell">Angular</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>HTTP Client</td>
+          <td>fetch, axios (manual install)</td>
+          <td>HttpClient (built-in)</td>
+        </tr>
+        <tr>
+          <td>Returns</td>
+          <td>Promise</td>
+          <td>Observable (RxJS)</td>
+        </tr>
+        <tr>
+          <td>Auto-cancel</td>
+          <td>AbortController (manual)</td>
+          <td>takeUntilDestroyed() / unsubscribe</td>
+        </tr>
+        <tr>
+          <td>Interceptors</td>
+          <td>axios interceptors / middleware</td>
+          <td>HttpInterceptorFn (functional)</td>
+        </tr>
+        <tr>
+          <td>Caching</td>
+          <td>TanStack Query</td>
+          <td>HTTP Transfer Cache (SSR)</td>
+        </tr>
+        <tr>
+          <td>State handling</td>
+          <td>useState (manual) or TanStack</td>
+          <td>Signal + subscribe or AsyncPipe</td>
+        </tr>
+        <tr>
+          <td>Retry / timeout</td>
+          <td>axios-retry</td>
+          <td>retry(), timeout() RxJS operators</td>
+        </tr>
+        <tr>
+          <td>Global headers</td>
+          <td>axios.defaults.headers</td>
+          <td>HTTP Interceptor</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="comparison-section">
+    <h3 class="comparison-title">1. Basic Fetch — react useState vs Angular Signals</h3>
+    <app-comparison-card
+      [reactCode]="reactFetch"
+      [angularCode]="angularHttpClient"
+      reactLabel="React fetch + useState"
+      angularLabel="Angular HttpClient + signal()"
+    />
+  </div>
+
+  <div class="comparison-section">
+    <h3 class="comparison-title">2. Server-State — TanStack Query vs Observable + AsyncPipe</h3>
+    <app-comparison-card
+      [reactCode]="tanstackQueryReact"
+      [angularCode]="angularObservable"
+      reactLabel="TanStack Query"
+      angularLabel="RxJS Observable + AsyncPipe"
+    />
+    <div class="key-diff-note">
+      <strong>AsyncPipe magic:</strong> Angular's <code>async</code> pipe automatically subscribes
+      AND unsubscribes from Observables. This prevents memory leaks without manual cleanup —
+      equivalent to TanStack Query's automatic cleanup.
+    </div>
+  </div>
+
+  <div class="comparison-section">
+    <h3 class="comparison-title">3. Best Practice — Dedicated HTTP Service</h3>
+    <app-code-block
+      [code]="httpServicePattern"
+      language="angular-ts"
+      label="Angular HTTP Service Pattern"
+    />
+    <div class="key-diff-note">
+      <strong>Angular convention:</strong> Always extract HTTP calls into a service — never call
+      HttpClient directly from a component. This mirrors React's pattern of putting fetch calls in
+      custom hooks (e.g., <code>usePostsQuery()</code>).
+    </div>
+  </div>
+</app-section-page>
+
+<style>
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+</style>
