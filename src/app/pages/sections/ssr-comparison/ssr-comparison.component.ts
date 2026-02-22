@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { SectionPageComponent } from '../../../shared/section-page/section-page.component';
-import { ComparisonCardComponent } from '../../../shared/comparison-card/comparison-card.component';
+import { SectionPageComponent } from '@shared/section-page/section-page.component';
+import { ComparisonCardComponent } from '@shared/comparison-card/comparison-card.component';
 
 @Component({
   selector: 'app-ssr-comparison',

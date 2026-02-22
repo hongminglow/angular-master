@@ -2,9 +2,9 @@ import { Component, signal, inject, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule, AsyncPipe } from '@angular/common';
 import { Observable, catchError, of, startWith, switchMap, BehaviorSubject } from 'rxjs';
-import { SectionPageComponent } from '../../../shared/section-page/section-page.component';
-import { ComparisonCardComponent } from '../../../shared/comparison-card/comparison-card.component';
-import { CodeBlockComponent } from '../../../shared/code-block/code-block.component';
+import { SectionPageComponent } from '@shared/section-page/section-page.component';
+import { ComparisonCardComponent } from '@shared/comparison-card/comparison-card.component';
+import { CodeBlockComponent } from '@shared/code-block/code-block.component';
 
 interface Post {
   id: number;

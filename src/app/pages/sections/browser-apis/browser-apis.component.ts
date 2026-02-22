@@ -1,9 +1,9 @@
 import { Component, signal, inject, PLATFORM_ID, OnInit } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
-import { SectionPageComponent } from '../../../shared/section-page/section-page.component';
-import { ComparisonCardComponent } from '../../../shared/comparison-card/comparison-card.component';
-import { CodeBlockComponent } from '../../../shared/code-block/code-block.component';
+import { SectionPageComponent } from '@shared/section-page/section-page.component';
+import { ComparisonCardComponent } from '@shared/comparison-card/comparison-card.component';
+import { CodeBlockComponent } from '@shared/code-block/code-block.component';
 
 interface StorageItem {
   key: string;

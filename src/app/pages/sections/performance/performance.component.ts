@@ -8,9 +8,9 @@ import {
   OnInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SectionPageComponent } from '../../../shared/section-page/section-page.component';
-import { ComparisonCardComponent } from '../../../shared/comparison-card/comparison-card.component';
-import { CodeBlockComponent } from '../../../shared/code-block/code-block.component';
+import { SectionPageComponent } from '@shared/section-page/section-page.component';
+import { ComparisonCardComponent } from '@shared/comparison-card/comparison-card.component';
+import { CodeBlockComponent } from '@shared/code-block/code-block.component';
 
 // ===== Pure Pipe — Angular equivalent of useMemo for template transforms =====
 @Pipe({ name: 'filterPrimes', pure: true, standalone: true })

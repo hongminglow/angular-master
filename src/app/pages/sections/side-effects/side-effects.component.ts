@@ -1,8 +1,8 @@
 import { Component, signal, effect, OnInit, OnDestroy, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SectionPageComponent } from '../../../shared/section-page/section-page.component';
-import { ComparisonCardComponent } from '../../../shared/comparison-card/comparison-card.component';
-import { CodeBlockComponent } from '../../../shared/code-block/code-block.component';
+import { SectionPageComponent } from '@shared/section-page/section-page.component';
+import { ComparisonCardComponent } from '@shared/comparison-card/comparison-card.component';
+import { CodeBlockComponent } from '@shared/code-block/code-block.component';
 
 @Component({
   selector: 'app-side-effects',

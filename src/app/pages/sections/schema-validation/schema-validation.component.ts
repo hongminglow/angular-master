@@ -9,9 +9,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { inject } from '@angular/core';
-import { SectionPageComponent } from '../../../shared/section-page/section-page.component';
-import { ComparisonCardComponent } from '../../../shared/comparison-card/comparison-card.component';
-import { CodeBlockComponent } from '../../../shared/code-block/code-block.component';
+import { SectionPageComponent } from '@shared/section-page/section-page.component';
+import { ComparisonCardComponent } from '@shared/comparison-card/comparison-card.component';
+import { CodeBlockComponent } from '@shared/code-block/code-block.component';
 
 // ===== Custom Validators (Angular equivalent of Zod refinements) =====
 function zodLikeEmail(): ValidatorFn {

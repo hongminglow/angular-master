@@ -9,9 +9,9 @@ import {
   ValidatorFn,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { SectionPageComponent } from '../../../shared/section-page/section-page.component';
-import { ComparisonCardComponent } from '../../../shared/comparison-card/comparison-card.component';
-import { CodeBlockComponent } from '../../../shared/code-block/code-block.component';
+import { SectionPageComponent } from '@shared/section-page/section-page.component';
+import { ComparisonCardComponent } from '@shared/comparison-card/comparison-card.component';
+import { CodeBlockComponent } from '@shared/code-block/code-block.component';
 
 // Custom validator — Angular equivalent of Zod/Yup refinements
 export function passwordMatchValidator(): ValidatorFn {

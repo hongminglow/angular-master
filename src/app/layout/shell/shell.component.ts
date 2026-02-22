@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '@services/auth.service';
 
 interface NavItem {
   path: string;
