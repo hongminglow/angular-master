@@ -1,0 +1,201 @@
+<app-section-page
+  title="Directives"
+  subtitle="React's custom hooks & HOCs vs Angular's Directives — attach reusable behavior to any element"
+  icon="🎯"
+>
+  <!-- Live Demo -->
+  <div class="demo-card">
+    <h3 class="demo-title">🎮 Live — Custom Highlight Directive</h3>
+    <p class="demo-subtitle">
+      Hover over the items below — each uses <code>[appHighlight]</code> with a different color
+    </p>
+
+    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap">
+      @for (c of colors; track c.value) {
+        <button
+          class="btn"
+          [class.btn-primary]="highlightColor() === c.value"
+          [class.btn-ghost]="highlightColor() !== c.value"
+          (click)="setColor(c.value)"
+        >
+          {{ c.label }}
+        </button>
+      }
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 0.5rem">
+      <div
+        [appHighlight]="highlightColor()"
+        style="
+          padding: 0.875rem;
+          border: 1px solid rgba(99, 102, 241, 0.12);
+          border-radius: 0.5rem;
+          color: #e2e8f0;
+          font-size: 0.85rem;
+          cursor: pointer;
+        "
+      >
+        🎨 Hover me! I use <code>[appHighlight]</code> — an <strong>attribute directive</strong>
+      </div>
+      <div
+        [appHighlight]="'rgba(74, 222, 128, 0.15)'"
+        style="
+          padding: 0.875rem;
+          border: 1px solid rgba(74, 222, 128, 0.12);
+          border-radius: 0.5rem;
+          color: #e2e8f0;
+          font-size: 0.85rem;
+          cursor: pointer;
+        "
+      >
+        💚 Different color — same directive, different input value
+      </div>
+      <div
+        [appHighlight]="'rgba(251, 146, 60, 0.15)'"
+        style="
+          padding: 0.875rem;
+          border: 1px solid rgba(251, 146, 60, 0.12);
+          border-radius: 0.5rem;
+          color: #e2e8f0;
+          font-size: 0.85rem;
+          cursor: pointer;
+        "
+      >
+        🧡 No wrapper components needed — behavior attaches directly via attribute
+      </div>
+    </div>
+
+    <p style="font-size: 0.72rem; color: #475569; margin-top: 0.75rem">
+      In React, you'd need a wrapper component or custom hook + ref for this behavior. Angular
+      directives attach behavior directly via HTML attributes.
+    </p>
+  </div>
+
+  <!-- Concept Box -->
+  <div class="concept-box">
+    <h3 class="concept-title">💡 What are Directives?</h3>
+    <div class="concept-content">
+      <p>
+        Directives are <strong>classes that add behavior to elements</strong>. Think of them as
+        "custom HTML attributes" that attach reusable logic. React has no direct equivalent — the
+        closest patterns are custom hooks, HOCs, and wrapper components.
+      </p>
+      <div class="concept-grid">
+        <div class="concept-item">
+          <span class="concept-icon">🏷️</span>
+          <div>
+            <strong>Attribute Directive</strong> — changes behavior/appearance (like [appHighlight])
+          </div>
+        </div>
+        <div class="concept-item">
+          <span class="concept-icon">🧩</span>
+          <div><strong>Component</strong> — directive with a template (what you already know!)</div>
+        </div>
+        <div class="concept-item">
+          <span class="concept-icon">👂</span>
+          <div>
+            <strong>&#64;HostListener</strong> — listens to host element events (click, hover, etc.)
+          </div>
+        </div>
+        <div class="concept-item">
+          <span class="concept-icon">🔗</span>
+          <div>
+            <strong>Host Directives</strong> — compose multiple directives on a component (Angular
+            15+)
+          </div>
+        </div>
+      </div>
+    </div>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Pattern</th>
+          <th class="react-cell">React</th>
+          <th class="angular-cell">Angular</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Attach behavior to element</td>
+          <td>Custom hook + ref</td>
+          <td>Attribute directive</td>
+        </tr>
+        <tr>
+          <td>Listen to DOM events</td>
+          <td>useEffect + addEventListener</td>
+          <td>&#64;HostListener('event')</td>
+        </tr>
+        <tr>
+          <td>Modify element styles</td>
+          <td>useRef + style manipulation</td>
+          <td>ElementRef + nativeElement</td>
+        </tr>
+        <tr>
+          <td>Click outside</td>
+          <td>useClickOutside hook</td>
+          <td>[appClickOutside] directive</td>
+        </tr>
+        <tr>
+          <td>Tooltip</td>
+          <td>&lt;Tooltip&gt; wrapper component</td>
+          <td>[appTooltip] directive (no wrapper!)</td>
+        </tr>
+        <tr>
+          <td>Compose behaviors</td>
+          <td>HOC chain / multiple hooks</td>
+          <td>hostDirectives: [...] (Angular 15+)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Comparison 1: Hook vs Directive -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">1. Reusable Behavior — Custom Hook vs Attribute Directive</h3>
+    <app-comparison-card
+      [reactCode]="reactNoDirectives"
+      [angularCode]="angularAttributeDirective"
+      reactLabel="React hooks + wrappers"
+      angularLabel="Angular attribute directive"
+    />
+    <div class="key-diff-note">
+      <strong>Key difference:</strong> React hooks are <em>called inside components</em> and often
+      need a <code>ref</code> to talk to the DOM. Angular directives are
+      <em>declared on elements</em> — they automatically have access to the host element via
+      <code>ElementRef</code>.
+    </div>
+  </div>
+
+  <!-- Comparison 2: Common patterns -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">2. Common Patterns — Tooltip, Click-Outside, AutoFocus</h3>
+    <app-comparison-card
+      [reactCode]="reactWrapperPatterns"
+      [angularCode]="angularCommonDirectives"
+      reactLabel="React wrappers & hooks"
+      angularLabel="Angular directive patterns"
+    />
+    <div class="key-diff-note">
+      <strong>No wrapper elements!</strong> Angular directives attach directly to the element —
+      <code>&lt;button appTooltip="Save"&gt;</code> adds a tooltip without wrapping in a
+      <code>&lt;Tooltip&gt;</code> component. This keeps the DOM cleaner and avoids CSS layout
+      issues from extra wrapper divs.
+    </div>
+  </div>
+
+  <!-- Angular-only: Host Directives -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">3. Angular-Specific: Host Directives — Behavior Composition</h3>
+    <app-code-block
+      [code]="hostDirectiveAngular"
+      language="angular-ts"
+      label="hostDirectives — compose multiple behaviors"
+    />
+    <div class="key-diff-note">
+      <strong>Composable behaviors!</strong> Angular 15's <code>hostDirectives</code> let you
+      compose multiple directives onto a component — like attaching multiple custom hooks, but
+      declaratively in the component decorator. React would need chained HOCs or multiple hooks with
+      manual wiring.
+    </div>
+  </div>
+</app-section-page>

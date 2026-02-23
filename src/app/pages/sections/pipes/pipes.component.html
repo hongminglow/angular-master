@@ -1,0 +1,180 @@
+<app-section-page
+  title="Pipes — Data Transformation"
+  subtitle="React's inline formatting vs Angular's template pipes — date, currency, async, and custom transforms"
+  icon="🔧"
+>
+  <!-- Live Demo -->
+  <div class="demo-card">
+    <h3 class="demo-title">🎮 Live — Angular Pipes in Action</h3>
+    <p class="demo-subtitle">
+      All formatting below uses Angular pipes directly in the template — no helper functions
+    </p>
+
+    <div class="computed-display" style="margin-bottom: 1rem">
+      <div class="computed-item">
+        <span class="computed-label">date:'mediumDate'</span>
+        <span class="computed-value">{{ now() | date: 'mediumDate' }}</span>
+      </div>
+      <div class="computed-item">
+        <span class="computed-label">date:'shortTime'</span>
+        <span class="computed-value">{{ now() | date: 'shortTime' }}</span>
+      </div>
+      <div class="computed-item">
+        <span class="computed-label">date:'full'</span>
+        <span class="computed-value" style="font-size: 0.72rem">{{ now() | date: 'full' }}</span>
+      </div>
+    </div>
+
+    <div class="computed-display" style="margin-bottom: 1rem">
+      <div class="computed-item">
+        <span class="computed-label">currency:'USD'</span>
+        <span class="computed-value">{{ price() | currency: 'USD' }}</span>
+      </div>
+      <div class="computed-item">
+        <span class="computed-label">currency:'EUR':'symbol'</span>
+        <span class="computed-value">{{ price() | currency: 'EUR' : 'symbol' }}</span>
+      </div>
+      <div class="computed-item">
+        <span class="computed-label">percent:'1.1-1'</span>
+        <span class="computed-value">{{ ratio() | percent: '1.1-1' }}</span>
+      </div>
+    </div>
+
+    <div class="computed-display" style="margin-bottom: 1rem">
+      <div class="computed-item">
+        <span class="computed-label">uppercase</span>
+        <span class="computed-value">{{ 'angular pipes' | uppercase }}</span>
+      </div>
+      <div class="computed-item">
+        <span class="computed-label">slice:0:25</span>
+        <span class="computed-value">{{ longText() | slice: 0 : 25 }}...</span>
+      </div>
+      <div class="computed-item">
+        <span class="computed-label">fileSize (custom)</span>
+        <span class="computed-value">{{ fileBytes() | fileSize }}</span>
+      </div>
+    </div>
+
+    <div style="padding: 0.75rem; background: rgba(0, 0, 0, 0.3); border-radius: 0.5rem">
+      <p style="font-size: 0.7rem; color: #64748b; margin-bottom: 0.375rem">
+        json pipe (debug output):
+      </p>
+      <pre
+        style="font-size: 0.72rem; color: #a5b4fc; margin: 0; font-family: 'Fira Code', monospace"
+        >{{ sampleObject() | json }}</pre
+      >
+    </div>
+  </div>
+
+  <!-- Concept Box -->
+  <div class="concept-box">
+    <h3 class="concept-title">💡 Why Pipes?</h3>
+    <div class="concept-content">
+      <p>
+        React formats data using <strong>inline JavaScript expressions</strong> or utility
+        functions. Angular uses <strong>pipes</strong> — declarative template transformers with the
+        <code>|</code> syntax. Pipes are <em>memoized by default</em>, so they only recompute when
+        input values change.
+      </p>
+    </div>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Transform</th>
+          <th class="react-cell">React</th>
+          <th class="angular-cell">Angular Pipe</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Date format</td>
+          <td>dayjs(date).format() / date-fns</td>
+          <td>value | date:'format'</td>
+        </tr>
+        <tr>
+          <td>Currency</td>
+          <td>new Intl.NumberFormat(...)</td>
+          <td>value | currency:'USD'</td>
+        </tr>
+        <tr>
+          <td>Percent</td>
+          <td>(n * 100).toFixed(1) + '%'</td>
+          <td>value | percent</td>
+        </tr>
+        <tr>
+          <td>Uppercase</td>
+          <td>str.toUpperCase()</td>
+          <td>value | uppercase</td>
+        </tr>
+        <tr>
+          <td>Array slice</td>
+          <td>arr.slice(0, 5)</td>
+          <td>value | slice:0:5</td>
+        </tr>
+        <tr>
+          <td>JSON debug</td>
+          <td>JSON.stringify(obj, null, 2)</td>
+          <td>value | json</td>
+        </tr>
+        <tr>
+          <td>Observable → value</td>
+          <td>useState + useEffect</td>
+          <td>obs$ | async</td>
+        </tr>
+        <tr>
+          <td>Custom transform</td>
+          <td>Utility function</td>
+          <td>Custom &#64;Pipe class</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Comparison 1: Built-in -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">1. Built-in Formatting — Inline JS vs Pipes</h3>
+    <app-comparison-card
+      [reactCode]="reactInlineFormat"
+      [angularCode]="angularBuiltinPipes"
+      reactLabel="React inline formatting"
+      angularLabel="Angular built-in pipes"
+    />
+    <div class="key-diff-note">
+      <strong>No libraries needed!</strong> Angular includes date, currency, decimal, percent,
+      uppercase, lowercase, titlecase, slice, json, and async pipes out of the box. React needs
+      <code>dayjs</code>/<code>date-fns</code> for dates and <code>Intl</code> API for numbers.
+    </div>
+  </div>
+
+  <!-- Comparison 2: Custom -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">2. Custom Transforms — Utility Functions vs Custom Pipes</h3>
+    <app-comparison-card
+      [reactCode]="reactCustomFormat"
+      [angularCode]="angularCustomPipes"
+      reactLabel="React utility functions"
+      angularLabel="Angular custom @Pipe"
+    />
+    <div class="key-diff-note">
+      <strong>Memoization for free:</strong> Pure pipes (default) are automatically memoized —
+      Angular caches the result and only recomputes when the input changes. React utility functions
+      run on <em>every render</em> unless you wrap them in <code>useMemo</code>.
+    </div>
+  </div>
+
+  <!-- Async Pipe -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">3. async Pipe — Angular's Most Powerful Pipe</h3>
+    <app-code-block
+      [code]="asyncPipeAngular"
+      language="angular-ts"
+      label="async pipe — auto-subscribe & unsubscribe"
+    />
+    <div class="key-diff-note">
+      <strong>The async pipe is magic:</strong> It subscribes to an Observable or Promise, emits the
+      latest value, and <em>automatically unsubscribes on component destroy</em>. This single pipe
+      replaces React's <code>useState</code> + <code>useEffect</code> + cleanup pattern for async
+      data.
+    </div>
+  </div>
+</app-section-page>

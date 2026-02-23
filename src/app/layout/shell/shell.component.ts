@@ -53,10 +53,46 @@ export class ShellComponent {
       category: 'Core Concepts',
     },
     {
+      path: '/template-syntax',
+      label: 'Template Syntax',
+      icon: '🎭',
+      category: 'Core Concepts',
+    },
+    {
+      path: '/component-communication',
+      label: 'Component Comms',
+      icon: '🔗',
+      category: 'Core Concepts',
+    },
+    {
       path: '/forms',
       label: 'Forms',
       icon: '📝',
       category: 'Core Concepts',
+    },
+    {
+      path: '/routing',
+      label: 'Routing',
+      icon: '🧭',
+      category: 'Architecture',
+    },
+    {
+      path: '/dependency-injection',
+      label: 'Dependency Injection',
+      icon: '💉',
+      category: 'Architecture',
+    },
+    {
+      path: '/pipes',
+      label: 'Pipes',
+      icon: '🔧',
+      category: 'Architecture',
+    },
+    {
+      path: '/directives',
+      label: 'Directives',
+      icon: '🎯',
+      category: 'Architecture',
     },
     {
       path: '/performance',

@@ -15,7 +15,7 @@
       </p>
       <div class="hero-stats">
         <div class="stat">
-          <span class="stat-number">9</span>
+          <span class="stat-number">{{ sections.length }}</span>
           <span class="stat-label">Topics</span>
         </div>
         <div class="stat-divider"></div>
@@ -95,7 +95,14 @@
               <span class="compare-val">{{ section.reactEquivalent }}</span>
             </div>
             <div class="compare-row">
-              <span class="compare-label angular-lbl">🅰️ Angular</span>
+              <span class="compare-label angular-lbl">
+                <img
+                  src="favicon.ico"
+                  style="width: 14px; height: 14px; margin-right: 4px; vertical-align: middle"
+                  alt="Angular Logo"
+                />
+                Angular
+              </span>
               <span class="compare-val">{{ section.angularConcept }}</span>
             </div>
           </div>
