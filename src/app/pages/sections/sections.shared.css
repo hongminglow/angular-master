@@ -350,7 +350,7 @@
 
 .concept-item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.625rem;
   padding: 0.875rem 1rem;
   background: rgba(0, 0, 0, 0.25);
@@ -495,7 +495,6 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 0.845rem;
-  margin-bottom: 2.5rem;
   border-radius: 0.75rem;
   overflow: hidden;
   border: 1px solid rgba(99, 102, 241, 0.12);

@@ -1,0 +1,190 @@
+<app-section-page
+  title="Component Communication"
+  subtitle="Props & callback functions vs Angular's input(), output(), ng-content, and model() — how components talk to each other"
+  icon="🔗"
+>
+  <!-- Live Demo -->
+  <div class="demo-card">
+    <h3 class="demo-title">🎮 Live — Parent ↔ Child Communication</h3>
+    <p class="demo-subtitle">
+      Demonstrating data flow: Parent sends message DOWN, Child sends events UP
+    </p>
+
+    <div style="margin-bottom: 1rem">
+      <label class="form-label" style="display: block; margin-bottom: 0.375rem"
+        >Parent Message (↓ flows down via input)</label
+      >
+      <input
+        [value]="parentMessage()"
+        (input)="updateParentMessage($event)"
+        class="form-input-demo"
+        style="width: 100%"
+      />
+    </div>
+
+    <div
+      style="
+        padding: 1rem;
+        background: rgba(99, 102, 241, 0.06);
+        border: 1px dashed rgba(99, 102, 241, 0.3);
+        border-radius: 0.75rem;
+        margin-bottom: 1rem;
+      "
+    >
+      <p style="font-size: 0.7rem; color: #6366f1; margin-bottom: 0.5rem; font-weight: 600">
+        CHILD COMPONENT ZONE
+      </p>
+      <div
+        style="
+          padding: 0.75rem;
+          background: rgba(0, 0, 0, 0.2);
+          border-radius: 0.5rem;
+          margin-bottom: 0.75rem;
+        "
+      >
+        <span style="font-size: 0.75rem; color: #64748b">Received from parent:</span>
+        <p style="color: #a5b4fc; font-size: 0.9rem; font-weight: 600; margin: 0.25rem 0 0">
+          {{ parentMessage() }}
+        </p>
+      </div>
+      <div style="display: flex; gap: 0.5rem">
+        <button
+          class="btn btn-primary"
+          style="font-size: 0.8rem"
+          (click)="onChildEvent('👋 Hello from Child!')"
+        >
+          Emit Event ↑
+        </button>
+        <button
+          class="btn btn-secondary"
+          style="font-size: 0.8rem"
+          (click)="onChildEvent('🎉 Child clicked!')"
+        >
+          Emit with Data ↑
+        </button>
+      </div>
+    </div>
+
+    <div class="computed-display">
+      <div
+        class="computed-item"
+        style="flex-direction: column; align-items: flex-start; gap: 0.375rem"
+      >
+        <span class="computed-label">Events received from child (↑ output)</span>
+        @if (childMessages().length > 0) {
+          @for (msg of childMessages(); track $index) {
+            <span class="computed-value" style="font-size: 0.75rem">{{ msg }}</span>
+          }
+        } @else {
+          <span class="computed-value" style="color: #475569"
+            >No events yet — click a button above</span
+          >
+        }
+      </div>
+    </div>
+    @if (childMessages().length > 0) {
+      <button
+        class="btn btn-ghost"
+        style="margin-top: 0.75rem; font-size: 0.78rem"
+        (click)="clearMessages()"
+      >
+        Clear Events
+      </button>
+    }
+  </div>
+
+  <!-- Concept Box -->
+  <div class="concept-box">
+    <h3 class="concept-title">💡 Angular's Component Communication Model</h3>
+    <div class="concept-content">
+      <p>
+        React uses <strong>props</strong> for everything — data down, callbacks up, and children for
+        slots. Angular separates these into distinct APIs: <strong>input()</strong> for data down,
+        <strong>output()</strong> for events up, and <strong>&lt;ng-content&gt;</strong> for content
+        projection.
+      </p>
+      <div class="concept-grid">
+        <div class="concept-item">
+          <span class="concept-icon">⬇️</span>
+          <div><strong>input()</strong> — data from parent to child (≈ props)</div>
+        </div>
+        <div class="concept-item">
+          <span class="concept-icon">⬆️</span>
+          <div><strong>output()</strong> — events from child to parent (≈ callback props)</div>
+        </div>
+        <div class="concept-item">
+          <span class="concept-icon">📦</span>
+          <div><strong>&lt;ng-content&gt;</strong> — content projection (≈ children / slots)</div>
+        </div>
+        <div class="concept-item">
+          <span class="concept-icon">🔄</span>
+          <div><strong>model()</strong> — two-way binding (no React equivalent!)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison 1: Props vs Input -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">1. Data Down — Props vs input()</h3>
+    <app-comparison-card
+      [reactCode]="reactPropsVsInput"
+      [angularCode]="angularInputOutput"
+      reactLabel="React props"
+      angularLabel="Angular input() + output()"
+    />
+    <div class="key-diff-note">
+      <strong>Key difference:</strong> React props carry both data and callbacks in one object.
+      Angular explicitly separates data flow (<code>input()</code>) from event flow
+      (<code>output()</code>). Angular's <code>input.required()</code> provides compile-time
+      enforcement — unlike React where missing props are caught only at runtime.
+    </div>
+  </div>
+
+  <!-- Comparison 2: Events Up -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">2. Events Up — Callback Props vs output()</h3>
+    <app-comparison-card
+      [reactCode]="reactCallbackProps"
+      [angularCode]="angularOutputEvents"
+      reactLabel="React callback props"
+      angularLabel="Angular output() events"
+    />
+    <div class="key-diff-note">
+      <strong>Angular pattern:</strong> The <code>(eventName)="handler($event)"</code> syntax in
+      templates is Angular's event binding. <code>$event</code> carries the emitted data — like
+      React's callback argument.
+    </div>
+  </div>
+
+  <!-- Comparison 3: Content Projection -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">3. Content Projection — children vs &lt;ng-content&gt;</h3>
+    <app-comparison-card
+      [reactCode]="reactChildren"
+      [angularCode]="angularContentProjection"
+      reactLabel="React children prop"
+      angularLabel="Angular &lt;ng-content&gt;"
+    />
+    <div class="key-diff-note">
+      <strong>Named slots!</strong> Angular supports <strong>multiple named slots</strong> via
+      <code>&lt;ng-content select="..."&gt;</code> — like Vue's named slots. React only has
+      <code>children</code> (one slot) and must use render props or named props for multiple slots.
+    </div>
+  </div>
+
+  <!-- Angular-Only: model() -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">4. Angular-Specific: model() — Two-Way Binding</h3>
+    <app-code-block
+      [code]="modelSignalAngular"
+      language="angular-ts"
+      label="model() — writable input signal (Angular 17+)"
+    />
+    <div class="key-diff-note">
+      <strong>No React equivalent!</strong> Angular's <code>model()</code> creates a two-way binding
+      between parent and child using the <code>[( )]</code> "banana-in-a-box" syntax. In React,
+      you'd need to pass both a value prop AND a callback prop manually.
+    </div>
+  </div>
+</app-section-page>

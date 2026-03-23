@@ -79,6 +79,44 @@ export const routes: Routes = [
             (m) => m.BrowserApisComponent,
           ),
       },
+      {
+        path: 'routing',
+        loadComponent: () =>
+          import('./pages/sections/routing/routing.component').then((m) => m.RoutingComponent),
+      },
+      {
+        path: 'component-communication',
+        loadComponent: () =>
+          import('./pages/sections/component-communication/component-communication.component').then(
+            (m) => m.ComponentCommunicationComponent,
+          ),
+      },
+      {
+        path: 'template-syntax',
+        loadComponent: () =>
+          import('./pages/sections/template-syntax/template-syntax.component').then(
+            (m) => m.TemplateSyntaxComponent,
+          ),
+      },
+      {
+        path: 'dependency-injection',
+        loadComponent: () =>
+          import('./pages/sections/dependency-injection/dependency-injection.component').then(
+            (m) => m.DependencyInjectionComponent,
+          ),
+      },
+      {
+        path: 'pipes',
+        loadComponent: () =>
+          import('./pages/sections/pipes/pipes.component').then((m) => m.PipesComponent),
+      },
+      {
+        path: 'directives',
+        loadComponent: () =>
+          import('./pages/sections/directives/directives.component').then(
+            (m) => m.DirectivesComponent,
+          ),
+      },
     ],
   },
   {

@@ -1,0 +1,175 @@
+<app-section-page
+  title="Routing & Navigation"
+  subtitle="React Router's JSX routes vs Angular's config-based Router — navigation, params, guards, and lazy loading"
+  icon="🧭"
+>
+  <!-- Live Demo -->
+  <div class="demo-card">
+    <h3 class="demo-title">🎮 Live — Route Navigation Demo</h3>
+    <p class="demo-subtitle">
+      Click routes below to see how Angular navigation works — this app itself uses all these
+      patterns
+    </p>
+
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem">
+      @for (r of demoRoutes(); track r.path) {
+        <a
+          [routerLink]="r.path"
+          class="btn btn-secondary"
+          style="text-decoration: none; font-size: 0.82rem"
+        >
+          {{ r.icon }} {{ r.label }}
+        </a>
+      }
+    </div>
+
+    <div class="computed-display">
+      <div class="computed-item">
+        <span class="computed-label">Current URL</span>
+        <span class="computed-value" style="font-family: 'Fira Code', monospace">{{
+          currentUrl()
+        }}</span>
+      </div>
+      <div class="computed-item">
+        <span class="computed-label">Router method</span>
+        <span class="computed-value">[routerLink] directive</span>
+      </div>
+      <div class="computed-item">
+        <span class="computed-label">Guard active</span>
+        <span class="computed-value" style="color: #4ade80">authGuard ✓</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Concept Box -->
+  <div class="concept-box">
+    <h3 class="concept-title">💡 React Router vs Angular Router</h3>
+    <div class="concept-content">
+      <p>
+        React Router defines routes as <strong>JSX components</strong> — routes are part of the
+        render tree. Angular defines routes as a <strong>TypeScript config array</strong> — routes
+        are data, not UI.
+      </p>
+    </div>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th class="react-cell">React Router</th>
+          <th class="angular-cell">Angular Router</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Route definition</td>
+          <td>&lt;Route path="..." element=&#123;...&#125; /&gt;</td>
+          <td>&#123; path: '...', loadComponent: () =&gt; ... &#125;</td>
+        </tr>
+        <tr>
+          <td>Nested routes</td>
+          <td>&lt;Outlet /&gt; in parent</td>
+          <td>&lt;router-outlet /&gt; in parent</td>
+        </tr>
+        <tr>
+          <td>Navigation link</td>
+          <td>&lt;Link to="/path"&gt;</td>
+          <td>[routerLink]="'/path'"</td>
+        </tr>
+        <tr>
+          <td>Programmatic nav</td>
+          <td>useNavigate()</td>
+          <td>inject(Router).navigate()</td>
+        </tr>
+        <tr>
+          <td>Route params</td>
+          <td>useParams()</td>
+          <td>inject(ActivatedRoute) / input()</td>
+        </tr>
+        <tr>
+          <td>Query params</td>
+          <td>useSearchParams()</td>
+          <td>[queryParams] / route.queryParams</td>
+        </tr>
+        <tr>
+          <td>Route guards</td>
+          <td>❌ Manual wrapper components</td>
+          <td>✅ Built-in canActivate, canDeactivate</td>
+        </tr>
+        <tr>
+          <td>Code splitting</td>
+          <td>React.lazy + Suspense</td>
+          <td>loadComponent() / loadChildren()</td>
+        </tr>
+        <tr>
+          <td>Active link styling</td>
+          <td>&lt;NavLink className="active"&gt;</td>
+          <td>routerLinkActive="active"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Comparison 1: Route Setup -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">1. Route Configuration — JSX vs Config Array</h3>
+    <app-comparison-card
+      [reactCode]="reactRouterSetup"
+      [angularCode]="angularRouterSetup"
+      reactLabel="React Router v6"
+      angularLabel="Angular Router"
+    />
+    <div class="key-diff-note">
+      <strong>Key difference:</strong> React Router routes live
+      <em>inside your component tree</em> as JSX. Angular routes are a
+      <em>separate config file</em> (<code>app.routes.ts</code>) — a data structure, not UI.
+      Angular's approach makes it easier to generate routes dynamically and apply guards/resolvers.
+    </div>
+  </div>
+
+  <!-- Comparison 2: Navigation -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">2. Navigation — Links, Params & Programmatic</h3>
+    <app-comparison-card
+      [reactCode]="reactNavigation"
+      [angularCode]="angularNavigation"
+      reactLabel="React Router hooks"
+      angularLabel="Angular Router + routerLink"
+    />
+    <div class="key-diff-note">
+      <strong>Angular 18+ tip:</strong> With <code>withComponentInputBinding()</code> in your router
+      config, route params are automatically bound to component <code>input()</code> signals — no
+      need to subscribe to <code>ActivatedRoute.params</code> manually!
+    </div>
+  </div>
+
+  <!-- Comparison 3: Guards -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">3. Route Guards — Built-in vs DIY</h3>
+    <app-comparison-card
+      [reactCode]="reactGuards"
+      [angularCode]="angularGuards"
+      reactLabel="React ProtectedRoute wrapper"
+      angularLabel="Angular canActivate guard"
+    />
+    <div class="key-diff-note">
+      <strong>Angular advantage:</strong> Route guards are a first-class feature. You can protect
+      routes, pre-fetch data (resolvers), and confirm navigation away (canDeactivate) — all
+      declaratively in the route config. React requires building these patterns manually.
+    </div>
+  </div>
+
+  <!-- Comparison 4: Lazy Loading -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">4. Lazy Loading — Built Into the Router</h3>
+    <app-code-block
+      [code]="lazyLoadingAngular"
+      language="angular-ts"
+      label="loadComponent() + loadChildren()"
+    />
+    <div class="key-diff-note">
+      <strong>Zero config code splitting:</strong> Every <code>loadComponent()</code> in this app's
+      routes automatically creates a separate JS chunk. No <code>React.lazy()</code> +
+      <code>Suspense</code> boilerplate needed.
+    </div>
+  </div>
+</app-section-page>

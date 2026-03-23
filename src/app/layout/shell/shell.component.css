@@ -47,9 +47,10 @@
 }
 
 .logo-icon {
-  font-size: 1.625rem;
+  width: 24px;
+  height: 24px;
   flex-shrink: 0;
-  line-height: 1;
+  display: block;
 }
 
 .logo-title {

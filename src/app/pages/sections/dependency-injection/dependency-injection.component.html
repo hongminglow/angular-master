@@ -1,0 +1,207 @@
+<app-section-page
+  title="Dependency Injection"
+  subtitle="React's Context API & custom hooks vs Angular's built-in DI system — inject(), providers, InjectionToken"
+  icon="💉"
+>
+  <!-- Live Demo -->
+  <div class="demo-card">
+    <h3 class="demo-title">🎮 Live — DI in Action</h3>
+    <p class="demo-subtitle">
+      This component uses inject(AuthService) — a singleton service shared across the entire app
+    </p>
+
+    <div class="computed-display">
+      <div class="computed-item">
+        <span class="computed-label">inject(AuthService)</span>
+        <span class="computed-value" style="color: #4ade80">Injected ✓</span>
+      </div>
+      <div class="computed-item">
+        <span class="computed-label">Logged in?</span>
+        <span class="computed-value" [style.color]="isLoggedIn() ? '#4ade80' : '#f87171'">{{
+          isLoggedIn()
+        }}</span>
+      </div>
+      <div class="computed-item">
+        <span class="computed-label">Current user</span>
+        <span class="computed-value">{{ currentUser()?.email ?? 'null' }}</span>
+      </div>
+    </div>
+
+    <div style="margin-top: 1rem">
+      <p style="font-size: 0.78rem; color: #64748b; margin-bottom: 0.5rem">
+        Services available via DI:
+      </p>
+      <div style="display: flex; flex-direction: column; gap: 0.35rem">
+        @for (svc of injectedServices(); track svc.name) {
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 0.75rem;
+              padding: 0.5rem 0.75rem;
+              background: rgba(99, 102, 241, 0.06);
+              border: 1px solid rgba(99, 102, 241, 0.1);
+              border-radius: 0.5rem;
+            "
+          >
+            <span
+              style="
+                font-size: 0.7rem;
+                padding: 0.1rem 0.4rem;
+                border-radius: 4px;
+                background: rgba(74, 222, 128, 0.15);
+                color: #4ade80;
+              "
+              >{{ svc.scope }}</span
+            >
+            <span style="flex: 1; font-size: 0.82rem; color: #e2e8f0; font-weight: 600">{{
+              svc.name
+            }}</span>
+            <code style="font-size: 0.72rem; color: #a5b4fc">{{ svc.method }}</code>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Concept Box -->
+  <div class="concept-box">
+    <h3 class="concept-title">💡 Angular DI vs React Context</h3>
+    <div class="concept-content">
+      <p>
+        React's <strong>Context API</strong> requires creating contexts, providers, and wrapper
+        components. Angular's <strong>DI System</strong> is built into the framework — services are
+        automatically singleton and injectable anywhere with <code>inject()</code>.
+      </p>
+      <div class="concept-grid">
+        <div class="concept-item">
+          <span class="concept-icon">🔧</span>
+          <div><strong>inject()</strong> — access any service (≈ useContext + custom hook)</div>
+        </div>
+        <div class="concept-item">
+          <span class="concept-icon">🏭</span>
+          <div>
+            <strong>providedIn: 'root'</strong> — automatic singleton (≈ ContextProvider at root)
+          </div>
+        </div>
+        <div class="concept-item">
+          <span class="concept-icon">🔑</span>
+          <div><strong>InjectionToken</strong> — inject config & values (≈ createContext)</div>
+        </div>
+        <div class="concept-item">
+          <span class="concept-icon">🌳</span>
+          <div>
+            <strong>Hierarchical DI</strong> — scoped instances per component tree (no React
+            equivalent!)
+          </div>
+        </div>
+      </div>
+    </div>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Pattern</th>
+          <th class="react-cell">React</th>
+          <th class="angular-cell">Angular</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Share state globally</td>
+          <td>createContext + Provider + useContext</td>
+          <td>&#64;Injectable(&#123; providedIn: 'root' &#125;)</td>
+        </tr>
+        <tr>
+          <td>Consume shared state</td>
+          <td>useContext(MyContext) / custom hook</td>
+          <td>inject(MyService)</td>
+        </tr>
+        <tr>
+          <td>Reusable logic</td>
+          <td>Custom hooks (useSomething)</td>
+          <td>Services (SomethingService)</td>
+        </tr>
+        <tr>
+          <td>Config values</td>
+          <td>createContext + Provider</td>
+          <td>InjectionToken + providers[]</td>
+        </tr>
+        <tr>
+          <td>Scoped instance</td>
+          <td>Multiple Provider wrappers</td>
+          <td>Component-level providers: []</td>
+        </tr>
+        <tr>
+          <td>Testing / Mocking</td>
+          <td>Custom wrapper with mock context</td>
+          <td>TestBed.configureTestingModule(&#123; providers: [] &#125;)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Comparison 1: Context vs DI -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">1. Global State — Context API vs Injectable Service</h3>
+    <app-comparison-card
+      [reactCode]="reactContextApi"
+      [angularCode]="angularDI"
+      reactLabel="React Context + Provider + useContext"
+      angularLabel="Angular @Injectable + inject()"
+    />
+    <div class="key-diff-note">
+      <strong>Key insight:</strong> React needs <em>5 steps</em> (create context → provider → hook →
+      wrap → use). Angular needs <em>2 steps</em> (create service → inject). The DI container
+      handles scoping, lifecycle, and singleton management automatically — no Provider tree
+      wrapping.
+    </div>
+  </div>
+
+  <!-- Comparison 2: Custom Hooks vs Services -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">2. Reusable Logic — Custom Hooks vs Services</h3>
+    <app-comparison-card
+      [reactCode]="reactCustomHooks"
+      [angularCode]="angularServices"
+      reactLabel="React custom hooks"
+      angularLabel="Angular services"
+    />
+    <div class="key-diff-note">
+      <strong>Key difference:</strong> React hooks create <em>new instances per component</em> —
+      each component gets its own localStorage or window size state. Angular services are
+      <em>singletons by default</em> — all components share the same instance. Want per-component
+      instances? Add the service to that component's <code>providers</code> array.
+    </div>
+  </div>
+
+  <!-- InjectionToken -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">3. InjectionToken — Angular's Config Injection</h3>
+    <app-code-block
+      [code]="injectionTokenAngular"
+      language="angular-ts"
+      label="InjectionToken — typed config values"
+    />
+    <div class="key-diff-note">
+      <strong>Better than env vars:</strong> InjectionTokens are fully typed, tree-shakable, and can
+      be overridden per component tree. Use them for API URLs, feature flags, and any configuration
+      that components need at runtime.
+    </div>
+  </div>
+
+  <!-- Hierarchical DI -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">4. Angular-Specific: Hierarchical Injectors</h3>
+    <app-code-block
+      [code]="hierarchicalDI"
+      language="angular-ts"
+      label="Component-scoped service instances"
+    />
+    <div class="key-diff-note">
+      <strong>No React equivalent!</strong> Angular's hierarchical DI lets you scope service
+      instances to a component subtree. Two instances of the same component each get their own
+      isolated service state. React would need separate Context providers manually wrapped around
+      each instance.
+    </div>
+  </div>
+</app-section-page>

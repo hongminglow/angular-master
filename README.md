@@ -14,7 +14,7 @@ If you know React, you already understand _what_ needs to happen. This app shows
 
 ## What the App Covers
 
-The platform is organized into **9 learning sections**, each containing:
+The platform is organized into **15 learning sections**, each containing:
 
 - ✅ A **live interactive demo** you can interact with directly in the browser
 - 📊 **Side-by-side code comparisons** (React on the left, Angular on the right)
@@ -23,17 +23,23 @@ The platform is organized into **9 learning sections**, each containing:
 
 ### Section Overview
 
-| #   | Topic                        | React Concept                                 | Angular Equivalent                                     |
-| --- | ---------------------------- | --------------------------------------------- | ------------------------------------------------------ |
-| 1   | **State (Signals)**          | `useState`, `useMemo`, `useReducer`           | `signal()`, `computed()`, `linkedSignal()`             |
-| 2   | **Side Effects & Lifecycle** | `useEffect`, component lifecycle              | `ngOnInit`, `ngOnDestroy`, `effect()`                  |
-| 3   | **Forms**                    | React Hook Form, controlled inputs            | Reactive Forms, `FormBuilder`, validators              |
-| 4   | **Performance**              | `React.memo`, `useMemo`, `useCallback`        | OnPush, Pure Pipes, `computed()`, `trackBy`            |
-| 5   | **Data Fetching**            | `fetch`, SWR, React Query                     | `HttpClient`, RxJS, `AsyncPipe`                        |
-| 6   | **State Management**         | Zustand, Redux Toolkit, Context API           | NgRx, Signal Stores, services with signals             |
-| 7   | **Schema Validation**        | Zod, Yup                                      | Angular Reactive Form validators                       |
-| 8   | **SSR Comparison**           | Next.js App Router, server components         | Angular SSR, `hydration`, `TransferState`              |
-| 9   | **Browser APIs**             | `typeof window`, `useRef`, `useEffect` guards | `PLATFORM_ID`, `isPlatformBrowser`, `inject(DOCUMENT)` |
+| #   | Topic                        | React Concept                                 | Angular Equivalent                                      |
+| --- | ---------------------------- | --------------------------------------------- | ------------------------------------------------------- |
+| 1   | **State (Signals)**          | `useState`, `useMemo`, `useReducer`           | `signal()`, `computed()`, `linkedSignal()`              |
+| 2   | **Side Effects & Lifecycle** | `useEffect`, component lifecycle              | `ngOnInit`, `ngOnDestroy`, `effect()`                   |
+| 3   | **Template Syntax**          | JSX ternary, `.map()`, `&&` operator          | `@if`, `@for`, `@switch`, `@defer`, `[class]`           |
+| 4   | **Component Communication**  | `props`, `children`, render props             | `input()`, `output()`, `ng-content`, `model()`          |
+| 5   | **Forms**                    | React Hook Form, controlled inputs            | Reactive Forms, `FormBuilder`, validators               |
+| 6   | **Routing & Navigation**     | React Router, `useNavigate`, `useParams`      | `Router`, `routerLink`, `canActivate`, `loadComponent`  |
+| 7   | **Dependency Injection**     | Context API, `useContext`, custom hooks       | `inject()`, `@Injectable`, `InjectionToken`             |
+| 8   | **Pipes**                    | Inline JS, dayjs, `Intl` API                  | `DatePipe`, `CurrencyPipe`, `AsyncPipe`, custom `@Pipe` |
+| 9   | **Directives**               | Custom hooks, HOCs, wrapper components        | `@Directive`, `@HostListener`, `hostDirectives`         |
+| 10  | **Performance**              | `React.memo`, `useMemo`, `useCallback`        | OnPush, Pure Pipes, `computed()`, `trackBy`             |
+| 11  | **Data Fetching**            | `fetch`, SWR, React Query                     | `HttpClient`, RxJS, `AsyncPipe`                         |
+| 12  | **State Management**         | Zustand, Redux Toolkit, Context API           | NgRx, Signal Stores, services with signals              |
+| 13  | **Schema Validation**        | Zod, Yup                                      | Angular Reactive Form validators                        |
+| 14  | **SSR Comparison**           | Next.js App Router, server components         | Angular SSR, `hydration`, `TransferState`               |
+| 15  | **Browser APIs**             | `typeof window`, `useRef`, `useEffect` guards | `PLATFORM_ID`, `isPlatformBrowser`, `inject(DOCUMENT)`  |
 
 ---
 

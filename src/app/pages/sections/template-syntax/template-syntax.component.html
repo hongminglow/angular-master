@@ -1,0 +1,327 @@
+<app-section-page
+  title="Template Syntax & Control Flow"
+  subtitle="React's JSX expressions vs Angular's &#64;if, &#64;for, &#64;switch, &#64;defer — and property/event/class bindings"
+  icon="🎭"
+>
+  <!-- Live Demo -->
+  <div class="demo-card">
+    <h3 class="demo-title">🎮 Live — Control Flow & Bindings</h3>
+    <p class="demo-subtitle">
+      Angular 17+ control flow in action — &#64;if, &#64;for, &#64;switch, &#64;empty
+    </p>
+
+    <!-- @if demo -->
+    <div style="margin-bottom: 1.25rem">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem">
+        <button class="btn btn-primary" (click)="toggleContent()">
+          {{ showContent() ? '🙈 Hide' : '👁️ Show' }} Content
+        </button>
+        <span style="font-family: 'Fira Code', monospace; font-size: 0.78rem; color: #64748b">
+          &#64;if (showContent())
+        </span>
+      </div>
+      @if (showContent()) {
+        <div
+          style="
+            padding: 0.75rem;
+            background: rgba(74, 222, 128, 0.08);
+            border: 1px solid rgba(74, 222, 128, 0.2);
+            border-radius: 0.5rem;
+            color: #4ade80;
+            font-size: 0.85rem;
+          "
+        >
+          ✅ Content is visible! This block uses <code>&#64;if</code> control flow.
+        </div>
+      } @else {
+        <div
+          style="
+            padding: 0.75rem;
+            background: rgba(248, 113, 113, 0.08);
+            border: 1px solid rgba(248, 113, 113, 0.2);
+            border-radius: 0.5rem;
+            color: #f87171;
+            font-size: 0.85rem;
+          "
+        >
+          ❌ Content is hidden. This is the <code>&#64;else</code> block.
+        </div>
+      }
+    </div>
+
+    <!-- @switch demo -->
+    <div style="margin-bottom: 1.25rem">
+      <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem">
+        <button
+          class="btn"
+          [class.btn-primary]="currentTab() === 'profile'"
+          [class.btn-ghost]="currentTab() !== 'profile'"
+          (click)="setTab('profile')"
+        >
+          Profile
+        </button>
+        <button
+          class="btn"
+          [class.btn-primary]="currentTab() === 'settings'"
+          [class.btn-ghost]="currentTab() !== 'settings'"
+          (click)="setTab('settings')"
+        >
+          Settings
+        </button>
+        <button
+          class="btn"
+          [class.btn-primary]="currentTab() === 'billing'"
+          [class.btn-ghost]="currentTab() !== 'billing'"
+          (click)="setTab('billing')"
+        >
+          Billing
+        </button>
+      </div>
+      @switch (currentTab()) {
+        @case ('profile') {
+          <div
+            style="
+              padding: 0.75rem;
+              background: rgba(99, 102, 241, 0.06);
+              border-radius: 0.5rem;
+              font-size: 0.85rem;
+              color: #a5b4fc;
+            "
+          >
+            👤 Profile tab — <code>&#64;case ('profile')</code>
+          </div>
+        }
+        @case ('settings') {
+          <div
+            style="
+              padding: 0.75rem;
+              background: rgba(251, 146, 60, 0.06);
+              border-radius: 0.5rem;
+              font-size: 0.85rem;
+              color: #fb923c;
+            "
+          >
+            ⚙️ Settings tab — <code>&#64;case ('settings')</code>
+          </div>
+        }
+        @case ('billing') {
+          <div
+            style="
+              padding: 0.75rem;
+              background: rgba(74, 222, 128, 0.06);
+              border-radius: 0.5rem;
+              font-size: 0.85rem;
+              color: #4ade80;
+            "
+          >
+            💳 Billing tab — <code>&#64;case ('billing')</code>
+          </div>
+        }
+      }
+    </div>
+
+    <!-- @for demo -->
+    <div>
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem">
+        <button class="btn btn-secondary" (click)="addItem()">+ Add Item</button>
+        <span style="font-size: 0.78rem; color: #64748b">
+          &#64;for + track item.id ({{ items().length }} items)
+        </span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 0.35rem">
+        @for (item of items(); track item.id; let i = $index; let isLast = $last) {
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 0.75rem;
+              padding: 0.5rem 0.75rem;
+              background: rgba(99, 102, 241, 0.06);
+              border: 1px solid rgba(99, 102, 241, 0.1);
+              border-radius: 0.5rem;
+            "
+          >
+            <span
+              style="
+                font-size: 0.7rem;
+                color: #475569;
+                min-width: 28px;
+                font-family: 'Fira Code', monospace;
+              "
+              >#{{ i }}</span
+            >
+            <span style="flex: 1; font-size: 0.85rem; color: #e2e8f0">{{ item.name }}</span>
+            <span
+              style="font-size: 0.7rem; padding: 0.1rem 0.4rem; border-radius: 4px"
+              [style.background]="
+                item.status === 'active'
+                  ? 'rgba(74, 222, 128, 0.15)'
+                  : item.status === 'pending'
+                    ? 'rgba(251, 146, 60, 0.15)'
+                    : 'rgba(248, 113, 113, 0.15)'
+              "
+              [style.color]="
+                item.status === 'active'
+                  ? '#4ade80'
+                  : item.status === 'pending'
+                    ? '#fb923c'
+                    : '#f87171'
+              "
+              >{{ item.status }}</span
+            >
+            <button
+              (click)="removeItem(item.id)"
+              style="
+                background: none;
+                border: none;
+                cursor: pointer;
+                color: #475569;
+                font-size: 1rem;
+                padding: 0;
+              "
+            >
+              ×
+            </button>
+          </div>
+        } @empty {
+          <p style="text-align: center; color: #475569; padding: 1rem; font-size: 0.85rem">
+            No items — add one above!
+          </p>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Concept Table -->
+  <div class="concept-box">
+    <h3 class="concept-title">💡 JSX Expressions vs Angular Template Syntax</h3>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Pattern</th>
+          <th class="react-cell">React (JSX)</th>
+          <th class="angular-cell">Angular Template</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>If/else</td>
+          <td><code>&#123;cond ? A : B&#125;</code></td>
+          <td><code>&#64;if (cond) &#123; A &#125; &#64;else &#123; B &#125;</code></td>
+        </tr>
+        <tr>
+          <td>Conditional render</td>
+          <td><code>&#123;show && &lt;A /&gt;&#125;</code></td>
+          <td><code>&#64;if (show) &#123; &lt;A /&gt; &#125;</code></td>
+        </tr>
+        <tr>
+          <td>Switch/case</td>
+          <td>Manual if/else chain</td>
+          <td><code>&#64;switch (val) &#123; &#64;case (...) &#125;</code></td>
+        </tr>
+        <tr>
+          <td>List rendering</td>
+          <td><code>items.map(i =&gt; &lt;li key=&#123;i.id&#125;&gt;)</code></td>
+          <td><code>&#64;for (i of items; track i.id)</code></td>
+        </tr>
+        <tr>
+          <td>Empty list</td>
+          <td><code>&#123;items.length === 0 && ...&#125;</code></td>
+          <td><code>&#64;empty &#123; ... &#125;</code></td>
+        </tr>
+        <tr>
+          <td>Lazy load block</td>
+          <td>React.lazy + Suspense</td>
+          <td><code>&#64;defer (on viewport)</code></td>
+        </tr>
+        <tr>
+          <td>Event binding</td>
+          <td><code>onClick=&#123;handler&#125;</code></td>
+          <td><code>(click)="handler()"</code></td>
+        </tr>
+        <tr>
+          <td>Property binding</td>
+          <td><code>value=&#123;state&#125;</code></td>
+          <td><code>[value]="state()"</code></td>
+        </tr>
+        <tr>
+          <td>Class binding</td>
+          <td><code>className=&#123;...&#125;</code></td>
+          <td><code>[class.active]="isActive()"</code></td>
+        </tr>
+        <tr>
+          <td>Style binding</td>
+          <td><code>style=object literal</code></td>
+          <td><code>[style.color]="'red'"</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Comparison 1: Conditionals -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">1. Conditional Rendering — Ternary vs &#64;if/&#64;switch</h3>
+    <app-comparison-card
+      [reactCode]="reactConditional"
+      [angularCode]="angularConditional"
+      reactLabel="React JSX conditionals"
+      angularLabel="Angular &#64;if / &#64;switch"
+    />
+    <div class="key-diff-note">
+      <strong>Key difference:</strong> React embeds JS expressions inside JSX — powerful but can get
+      messy. Angular's <code>&#64;if</code> and <code>&#64;switch</code> are dedicated template
+      constructs that are more readable, especially for complex conditional logic.
+    </div>
+  </div>
+
+  <!-- Comparison 2: Lists -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">2. List Rendering — .map() vs &#64;for</h3>
+    <app-comparison-card
+      [reactCode]="reactLists"
+      [angularCode]="angularLists"
+      reactLabel="React .map() + key"
+      angularLabel="Angular &#64;for + track"
+    />
+    <div class="key-diff-note">
+      <strong>Angular bonuses:</strong> <code>&#64;for</code> has a built-in
+      <code>&#64;empty</code> block for empty lists, and provides <code>$index</code>,
+      <code>$first</code>, <code>$last</code>, <code>$even</code>, <code>$odd</code>,
+      <code>$count</code> as local variables automatically. React requires manual checks for all of
+      these.
+    </div>
+  </div>
+
+  <!-- Comparison 3: Bindings -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">3. Event & Property Bindings</h3>
+    <app-comparison-card
+      [reactCode]="reactEventBinding"
+      [angularCode]="angularEventBinding"
+      reactLabel="React JSX bindings"
+      angularLabel="Angular template bindings"
+    />
+    <div class="key-diff-note">
+      <strong>Template variables!</strong> Angular's <code>#nameInput</code> creates a template
+      reference variable — you can call DOM methods directly in the template without
+      <code>useRef</code>.
+    </div>
+  </div>
+
+  <!-- Angular-only: @defer -->
+  <div class="comparison-section">
+    <h3 class="comparison-title">4. Angular-Specific: &#64;defer — Lazy Template Blocks</h3>
+    <app-code-block
+      [code]="deferAngular"
+      language="angular-ts"
+      label="&#64;defer — viewport/interaction/timer triggers"
+    />
+    <div class="key-diff-note">
+      <strong>Game-changer!</strong> <code>&#64;defer</code> lazy-loads template blocks with
+      built-in <code>&#64;placeholder</code>, <code>&#64;loading</code>, and
+      <code>&#64;error</code> states. Triggers include viewport intersection, user interaction,
+      timers, and boolean conditions. React has nothing this elegant — you'd need React.lazy +
+      IntersectionObserver + error boundaries.
+    </div>
+  </div>
+</app-section-page>
